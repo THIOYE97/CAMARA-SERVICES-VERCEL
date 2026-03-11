@@ -3,42 +3,66 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Services d'Étude - CamaraServices</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <title>Étude — CamaraServices</title>
+  <link rel="icon" type="image/png" href="./assets/favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: #D8EBF7; /* Bleu ciel */
-    }
-    #logo {
-      animation: float 3s ease-in-out infinite;
-    }
-    @keyframes float {
-      0%, 100% {
-        transform: translateY(0);
-      }
-      50% {
-        transform: translateY(-10px);
-      }
-    }
+    :root{--bg:#06090F;--bg2:#0D1220;--card:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.08);--orange:#FF6B2B;--orange2:#FF8C55;--text:#F0F4FF;--muted:#8892A4;}
+    *{margin:0;padding:0;box-sizing:border-box;} body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;min-height:100vh;display:flex;flex-direction:column;}
+    h1,h2,h3{font-family:'Outfit',sans-serif;}
+    .back-btn{display:inline-flex;align-items:center;gap:0.5rem;color:var(--muted);text-decoration:none;font-family:'Outfit',sans-serif;font-weight:500;font-size:0.9rem;padding:0.5rem 1rem;border-radius:100px;background:var(--card);border:1px solid var(--border);transition:all 0.3s;}
+    .back-btn:hover{color:var(--text);}
+    ::-webkit-scrollbar{width:6px;} ::-webkit-scrollbar-track{background:var(--bg);} ::-webkit-scrollbar-thumb{background:rgba(255,107,43,0.4);border-radius:3px;}
+    .main-content{flex:1;display:flex;align-items:center;justify-content:center;padding:8rem 2rem 4rem;}
+    .service-icon-big{font-size:5rem;margin-bottom:1.5rem;animation:float 4s ease-in-out infinite;} @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+    .btn-orange{background:var(--orange);color:white;padding:0.9rem 2rem;border-radius:100px;font-family:'Outfit',sans-serif;font-weight:700;font-size:1rem;text-decoration:none;transition:all 0.3s;display:inline-flex;align-items:center;gap:0.6rem;}
+    .btn-orange:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(255,107,43,0.4);}
+    .btn-ghost{background:transparent;color:var(--text);padding:0.9rem 2rem;border-radius:100px;font-family:'Outfit',sans-serif;font-weight:600;font-size:1rem;text-decoration:none;border:1px solid var(--border);transition:all 0.3s;display:inline-flex;align-items:center;}
+    .btn-ghost:hover{border-color:rgba(255,255,255,0.2);background:rgba(255,255,255,0.04);}
+    .features-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:3rem;}
+    .feature-item{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.5rem;text-align:center;transition:all 0.3s;}
+    .feature-item:hover{border-color:rgba(255,107,43,0.25);}
+    @media(max-width:640px){.features-row{grid-template-columns:1fr;}}
   </style>
 </head>
-<body class="relative flex flex-col items-center justify-center min-h-screen text-center">
-
-  <!-- Bouton de retour -->
-  <button onclick="history.back()" class="absolute top-4 left-4 bg-gray-200 text-gray-800 hover:bg-gray-300 rounded-full p-2 shadow-lg">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-    </svg>
-  </button>
-
-  <!-- Contenu principal -->
-  <img id="logo" src="./logo1.png" alt="Logo CamaraServices" class="w-24 mb-8">
-  <h1 class="text-3xl font-bold text-gray-800 mb-4">Avez-vous besoin de nos services d'étude ?</h1>
-  <a href="mailto:contact@camara-services.com" class="bg-orange-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-orange-600">
-    Contactez-nous
-  </a>
-
+<body>
+<div style="position:fixed;top:0;left:50%;transform:translateX(-50%);width:800px;height:400px;background:radial-gradient(ellipse,rgba(255,107,43,0.08) 0%,transparent 70%);pointer-events:none;z-index:0;"></div>
+<div style="position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.015) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;mask-image:radial-gradient(ellipse at center,black 30%,transparent 80%);"></div>
+<nav style="position:fixed;top:0;left:0;right:0;z-index:100;padding:1.2rem 2rem;background:rgba(6,9,15,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);">
+  <div style="max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;">
+    <a href="./index.html" style="font-family:'Outfit',sans-serif;font-weight:800;font-size:1.3rem;color:var(--text);text-decoration:none;">☀ Camara<span style="color:var(--orange);">Services</span></a>
+    <a href="javascript:history.back()" class="back-btn">← Retour</a>
+  </div>
+</nav>
+<main class="main-content" style="position:relative;z-index:1;">
+  <div style="max-width:700px;width:100%;text-align:center;">
+    <div class="service-icon-big">🔍</div>
+    <div style="display:inline-flex;align-items:center;background:rgba(255,107,43,0.12);border:1px solid rgba(255,107,43,0.25);color:#FF8C55;padding:0.4rem 1rem;border-radius:100px;font-size:0.8rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:1.5rem;">✦ Service</div>
+    <h1 style="font-size:clamp(2rem,5vw,3.5rem);font-weight:900;letter-spacing:-0.02em;margin-bottom:1rem;line-height:1.1;">Étude &amp; <span style="color:var(--orange);">Diagnostic</span></h1>
+    <p style="color:var(--muted);font-size:1.05rem;line-height:1.7;margin-bottom:2.5rem;">Une étude rigoureuse est la base de tout projet solaire réussi. Nous réalisons des études de faisabilité complètes, analyses du potentiel solaire, dimensionnement sur mesure et plans d'installation détaillés pour chaque client.</p>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+      <a href="mailto:contact@camara-services.com" class="btn-orange">✉ Demander une étude</a>
+      <a href="./projets.html" class="btn-ghost">Voir nos réalisations</a>
+    </div>
+    <div class="features-row">
+      <div class="feature-item">
+        <div style="font-size:1.5rem;margin-bottom:0.6rem;">☀</div>
+        <div style="font-family:'Outfit',sans-serif;font-weight:700;font-size:0.9rem;">Potentiel solaire</div>
+        <div style="font-size:0.8rem;color:var(--muted);margin-top:0.3rem;">Analyse d'ensoleillement du site</div>
+      </div>
+      <div class="feature-item">
+        <div style="font-size:1.5rem;margin-bottom:0.6rem;">📐</div>
+        <div style="font-family:'Outfit',sans-serif;font-weight:700;font-size:0.9rem;">Dimensionnement</div>
+        <div style="font-size:0.8rem;color:var(--muted);margin-top:0.3rem;">Calcul précis selon vos besoins</div>
+      </div>
+      <div class="feature-item">
+        <div style="font-size:1.5rem;margin-bottom:0.6rem;">📄</div>
+        <div style="font-family:'Outfit',sans-serif;font-weight:700;font-size:0.9rem;">Rapport complet</div>
+        <div style="font-size:0.8rem;color:var(--muted);margin-top:0.3rem;">Documentation technique détaillée</div>
+      </div>
+    </div>
+  </div>
+</main>
 </body>
 </html>

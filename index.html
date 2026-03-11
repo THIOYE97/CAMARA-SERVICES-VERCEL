@@ -1,555 +1,570 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CamaraServices</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <title>CamaraServices — Énergies Renouvelables</title>
+  <link rel="icon" type="image/png" href="./assets/favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  
   <style>
-    body {
-      font-family: 'Poppins', sans-serif;
+    :root {
+      --bg: #06090F;
+      --bg2: #0D1220;
+      --card: rgba(255,255,255,0.04);
+      --border: rgba(255,255,255,0.08);
+      --orange: #FF6B2B;
+      --orange2: #FF8C55;
+      --gold: #FFB347;
+      --text: #F0F4FF;
+      --muted: #8892A4;
     }
- @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-   </style>
+    .mobile-menu { display: none; }           /* caché partout par défaut */
+.mobile-menu.open { display: flex !important; }  /* visible seulement quand ouvert via JS */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+    h1,h2,h3,h4,h5 { font-family: 'Outfit', sans-serif; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 1.2rem 2rem;
+      transition: all 0.4s ease;
+    }
+    nav.scrolled {
+      background: rgba(6,9,15,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 0.8rem 2rem;
+    }
+    .nav-inner { max-width: 1280px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.3rem; color: var(--text); text-decoration: none; display: flex; align-items: center; gap: 0.6rem; }
+    .nav-logo span { color: var(--orange); }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a { font-family: 'Outfit', sans-serif; font-weight: 500; font-size: 0.9rem; color: var(--muted); text-decoration: none; transition: color 0.3s; letter-spacing: 0.05em; text-transform: uppercase; }
+    .nav-links a:hover, .nav-links a.active { color: var(--text); }
+    .nav-links a.active { color: var(--orange); }
+    .nav-cta { background: var(--orange); color: white; padding: 0.55rem 1.4rem; border-radius: 100px; font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 0.85rem; text-decoration: none; transition: all 0.3s; }
+    .nav-cta:hover { background: var(--orange2); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(255,107,43,0.35); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+      padding: 8rem 2rem 4rem;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(255,107,43,0.12) 0%, transparent 60%),
+                  radial-gradient(ellipse 50% 50% at 80% 50%, rgba(255,179,71,0.06) 0%, transparent 50%),
+                  var(--bg);
+    }
+    .grid-pattern {
+      position: absolute; inset: 0;
+      background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+    }
+    .orb {
+      position: absolute; border-radius: 50%;
+      filter: blur(80px); animation: float 6s ease-in-out infinite;
+    }
+    .orb-1 { width: 500px; height: 500px; background: rgba(255,107,43,0.08); top: -100px; left: -100px; }
+    .orb-2 { width: 400px; height: 400px; background: rgba(255,179,71,0.06); bottom: -100px; right: -100px; animation-delay: -3s; }
+    @keyframes float { 0%,100%{transform:translateY(0) scale(1)} 50%{transform:translateY(-20px) scale(1.05)} }
+
+    .hero-content { position: relative; text-align: center; max-width: 900px; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(255,107,43,0.12); border: 1px solid rgba(255,107,43,0.25);
+      color: var(--orange2); padding: 0.4rem 1rem; border-radius: 100px;
+      font-size: 0.8rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+    .hero-badge::before { content:''; width:6px; height:6px; background:var(--orange); border-radius:50%; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.4)} }
+    .hero-title { font-size: clamp(2.8rem, 7vw, 6rem); font-weight: 900; line-height: 1.05; margin-bottom: 1.5rem; letter-spacing: -0.02em; }
+    .hero-title .line-orange { color: var(--orange); }
+    .hero-title .line-dim { color: var(--muted); font-weight: 300; }
+    .hero-desc { font-size: 1.1rem; color: var(--muted); max-width: 560px; margin: 0 auto 2.5rem; line-height: 1.7; }
+    .hero-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn-primary { background: var(--orange); color: white; padding: 0.9rem 2rem; border-radius: 100px; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 1rem; text-decoration: none; transition: all 0.3s; display: inline-flex; align-items: center; gap: 0.5rem; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(255,107,43,0.4); background: var(--orange2); }
+    .btn-secondary { background: transparent; color: var(--text); padding: 0.9rem 2rem; border-radius: 100px; font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 1rem; text-decoration: none; border: 1px solid var(--border); transition: all 0.3s; display: inline-flex; align-items: center; gap: 0.5rem; }
+    .btn-secondary:hover { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); }
+
+    .hero-stats { display: flex; gap: 3rem; justify-content: center; margin-top: 4rem; flex-wrap: wrap; }
+    .stat { text-align: center; }
+    .stat-num { font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 800; color: var(--text); line-height: 1; }
+    .stat-num span { color: var(--orange); }
+    .stat-label { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 0.3rem; }
+
+    /* SECTIONS */
+    section { padding: 5rem 2rem; }
+    .section-inner { max-width: 1280px; margin: 0 auto; }
+    .section-tag { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--orange); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.5rem; }
+    .section-tag::before { content:''; display:inline-block; width:24px; height:2px; background:var(--orange); }
+    .section-title { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 1rem; }
+    .section-desc { color: var(--muted); font-size: 1.05rem; line-height: 1.7; max-width: 560px; }
+
+    /* SERVICES */
+    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
+    .service-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 20px; padding: 2rem; transition: all 0.4s ease;
+      position: relative; overflow: hidden; text-decoration: none; color: var(--text);
+    }
+    .service-card::before {
+      content:''; position:absolute; inset:0;
+      background: radial-gradient(ellipse at top left, rgba(255,107,43,0.08), transparent 60%);
+      opacity:0; transition: opacity 0.4s;
+    }
+    .service-card:hover { border-color: rgba(255,107,43,0.3); transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+    .service-card:hover::before { opacity:1; }
+    .service-icon { width: 52px; height: 52px; background: rgba(255,107,43,0.12); border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.2rem; font-size: 1.5rem; }
+    .service-title { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 1.1rem; margin-bottom: 0.6rem; }
+    .service-desc { font-size: 0.9rem; color: var(--muted); line-height: 1.6; }
+    .service-arrow { margin-top: 1.5rem; color: var(--orange); font-size: 1.2rem; transition: transform 0.3s; }
+    .service-card:hover .service-arrow { transform: translateX(4px); }
+
+    /* ACTIVITIES */
+    .activities-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
+    .activity-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 20px; overflow: hidden; transition: all 0.4s ease;
+      text-decoration: none; color: var(--text);
+    }
+    .activity-card:hover { border-color: rgba(255,107,43,0.2); transform: translateY(-4px); box-shadow: 0 24px 60px rgba(0,0,0,0.5); }
+    .activity-img { position: relative; height: 200px; overflow: hidden; }
+    .activity-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+    .activity-card:hover .activity-img img { transform: scale(1.06); }
+    .activity-img-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(6,9,15,0.8) 0%, transparent 50%); }
+    .activity-tag { position: absolute; top: 1rem; left: 1rem; background: var(--orange); color: white; padding: 0.25rem 0.75rem; border-radius: 100px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+    .activity-body { padding: 1.5rem; }
+    .activity-date { font-size: 0.78rem; color: var(--muted); margin-bottom: 0.5rem; }
+    .activity-title { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 1rem; line-height: 1.4; margin-bottom: 0.5rem; }
+    .activity-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+    /* TEAM */
+    .team-section { background: var(--bg2); }
+    .team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
+    .team-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 24px; padding: 2rem; text-align: center;
+      transition: all 0.4s ease;
+    }
+    .team-card:hover { border-color: rgba(255,107,43,0.2); transform: translateY(-4px); }
+    .team-avatar { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin: 0 auto 1.2rem; border: 3px solid rgba(255,107,43,0.3); }
+    .team-name { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 1.05rem; margin-bottom: 0.3rem; }
+    .team-role { font-size: 0.82rem; color: var(--orange); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.8rem; }
+    .team-bio { font-size: 0.83rem; color: var(--muted); line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
+    /* PARTNERS */
+    .partners-section { padding: 4rem 2rem; border-top: 1px solid var(--border); }
+    .partners-title { text-align: center; font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 2.5rem; }
+    .partners-row { display: flex; gap: 3rem; justify-content: center; align-items: center; flex-wrap: wrap; }
+    .partner-logo { opacity: 0.4; transition: opacity 0.3s; filter: grayscale(1) brightness(2); width: 100px; height: 60px; object-fit: contain; }
+    .partner-logo:hover { opacity: 0.8; }
+
+    /* FOOTER */
+    footer { background: #030508; border-top: 1px solid var(--border); padding: 4rem 2rem 2rem; }
+    .footer-inner { max-width: 1280px; margin: 0 auto; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 3rem; margin-bottom: 3rem; }
+    .footer-brand { font-family: 'Outfit', sans-serif; }
+    .footer-logo { font-size: 1.3rem; font-weight: 800; margin-bottom: 1rem; }
+    .footer-logo span { color: var(--orange); }
+    .footer-tagline { color: var(--muted); font-size: 0.9rem; line-height: 1.7; margin-bottom: 1.5rem; }
+    .social-links { display: flex; gap: 0.75rem; }
+    .social-link { width: 38px; height: 38px; border-radius: 10px; background: var(--card); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--muted); transition: all 0.3s; text-decoration: none; }
+    .social-link:hover { background: var(--orange); color: white; border-color: transparent; }
+    .footer-heading { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1.2rem; color: var(--text); }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; }
+    .footer-links a { color: var(--muted); text-decoration: none; font-size: 0.9rem; transition: color 0.3s; }
+    .footer-links a:hover { color: var(--orange); }
+    .footer-contact-item { display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 0.8rem; }
+    .footer-contact-icon { color: var(--orange); flex-shrink: 0; margin-top: 2px; }
+    .footer-contact-text { color: var(--muted); font-size: 0.88rem; line-height: 1.5; }
+    .footer-contact-text a { color: var(--muted); text-decoration: none; }
+    .footer-contact-text a:hover { color: var(--orange); }
+    .footer-bottom { border-top: 1px solid var(--border); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    .footer-copy { color: var(--muted); font-size: 0.85rem; }
+    .footer-copy a { color: var(--orange); text-decoration: none; }
+
+    /* ANIMATIONS */
+    .fade-up { opacity: 0; transform: translateY(30px); transition: all 0.7s ease; }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .hero-stats { gap: 1.5rem; }
+    }
+
+    /* SCROLL BAR */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: rgba(255,107,43,0.4); border-radius: 3px; }
+
+    /* HAMBURGER */
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--text); transition: all 0.3s; border-radius: 2px; }
+    @media (max-width: 768px) {
+      .hamburger { display: flex; }
+      .mobile-menu { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--bg); z-index: 200; flex-direction: column; align-items: center; justify-content: center; gap: 2rem; }
+      .mobile-menu.open { display: flex; }
+      .mobile-menu a { font-family: 'Outfit', sans-serif; font-size: 1.8rem; font-weight: 700; color: var(--text); text-decoration: none; text-transform: uppercase; letter-spacing: 0.05em; }
+      .mobile-menu a:hover, .mobile-menu a.active { color: var(--orange); }
+      .mobile-close { position: absolute; top: 1.5rem; right: 1.5rem; font-size: 1.5rem; color: var(--muted); background: none; border: none; cursor: pointer; }
+    }
+  </style>
 </head>
+<body>
 
-<body class="bg-[#E4E7EC] ">
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" onclick="closeMobileMenu()">✕</button>
+  <a href="./index.html" class="active">Accueil</a>
+  <a href="./about.html">À propos</a>
+  <a href="./projets.html">Projets</a>
+  <a href="./contact.html">Contact</a>
+</div>
 
-<!-- Navigation -->
-<section class="h-[500px] bg-center bg-cover bg-no-repeat" style="background-image: url('./sld.jpg')">
+<!-- NAV -->
+<nav id="mainNav">
+  <div class="nav-inner">
+    <a href="./index.html" class="nav-logo">
+      ☀ Camara<span>Services</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="./index.html" class="active">Accueil</a></li>
+      <li><a href="./about.html">À propos</a></li>
+      <li><a href="./projets.html">Projets</a></li>
+      <li><a href="./contact.html">Contact</a></li>
+    </ul>
+    <a href="./contact.html" class="nav-cta" style="display:none" id="desktopCta">Nous contacter</a>
+    <div class="hamburger" onclick="openMobileMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
 
-  <nav id="navFixed" class="text-white p-4 fixed top-0 left-0 right-0 border-b border-[#1B3F7E]">
-    <div class=" container md:px-28 mx-auto flex justify-between items-center">
-      <a  href="#" class="text-white font-semibold text-xl">
-        <img id="navlogo" class="md:w-28 w-8" src="./logo1.png" alt="" srcset="./logo1.png">
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="grid-pattern"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="hero-content">
+    <div class="hero-badge">✦ Depuis 2023 — Bamako, Mali</div>
+    <h1 class="hero-title">
+      L'énergie solaire<br>
+      <span class="line-orange">au service</span><br>
+      <span class="line-dim">de votre avenir</span>
+    </h1>
+    <p class="hero-desc">
+      Camara Services SARL — experts en énergies renouvelables et développement durable. Installation, étude, conseil, forage.
+    </p>
+    <div class="hero-actions">
+      <a href="./projets.html" class="btn-primary">
+        Voir nos projets
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
-      <ul class="flex md:space-x-4 space-x-2 font-bold ">
-        <li><a href="./index.html" class="text-xs md:text-lg pb-2 hover:text-orange-600 border-b-4 md:pb-9 border-orange-500">Accueil</a></li>
-        <li><a href="./about.html" class="text-xs md:text-lg pb-2 hover:text-orange-600">A propos</a></li>
-
-        <li><a href="./projets.html" class="text-xs md:text-lg pb-2 hover:text-orange-600">Projets</a></li>
-        <li><a href="./contact.html" class="text-xs md:text-lg pb-2 hover:text-orange-600 ">Contact</a></li>
-       </ul>
+      <a href="./about.html" class="btn-secondary">
+        Qui sommes-nous ?
+      </a>
     </div>
-  </nav>  
-  
-  <!-- Slider Section -->
-      <div class="h-[500px] flex items-center justify-center">
-      <h1 class="text-white text-5xl font-bold text-center">Bienvenue Chez Camara Services</h1>
-    </div>
- </section>
- 
-
- <!-- Activity -->
-  <section class="md:px-28 px-6">
-  <div class="mx-auto py-8 md:py-16 px-6">
-    <h1 class="text-3xl font-bold mb-6">CAMARA SERVICES SARLs</h1>
-    <div class="md:flex ">    
-      <p class="w-full mb-2 md:w-1/2 md:mr-8 md:pr-12">Est une entreprise spécialisée en énergies renouvelables et développement durable créée en 2023 et enregistrée sous le nouveau numéro Ma BKO 2023-M-55 62.</p>
-      <div class="md:w-1/2 flex justify-between border-b border-gray-400 pb-5">
-        <img class="md:w-16 w-8" src="./logo/pv.svg" alt="" srcset="">
-        <img class="md:w-16 w-8" src="./logo/energy.svg" alt="" srcset="">
-        <img class="md:w-16 w-8" src="./logo/storage.svg" alt="" srcset="">
-        <img class="md:w-16 w-8" src="./logo/water.svg" alt="" srcset="">
-        <img class="md:w-16 w-8" src="./logo/storagelittle.svg" alt="" srcset="">
-    </div>
-    </div>
-  </div>
-
-    <!--Activités-->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-2">
-          <!--A1-->
-      <article  class="flex p-2 border-white border rounded-2xl max-w-xl flex-col items-start justify-between">
-            
-            <a href="./projets.html" class="">
-              <img src="./I/a11.jpg" alt="" class="object-cover rounded-2xl w-full max-w-full h-auto block sm:[aspect-ratio:2/1] lg:[aspect-ratio:3/2]">
-              <div class="rounded-2xl absolute"></div>
-            </a>
-
-            <div>
-               <div class="flex items-center gap-x-4 text-xs mt-6">
-              <time datetime="2020-03-16" class="text-gray-500">Mar 16, 2023</time>
-              <a href="./projets.html" class=" rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100">Forage</a>
-            </div>
-            <div class="group  ">
-              <h3 class="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
-                <a href="./projets.html">
-                  <span class=" inset-0"></span>
-Activité                </a>
-              </h3>
-              <p class="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">
-                Réalisation et installation d’un forage à Sirakoro en 2023 pour un particulier ;
-              </p>
-            </div>
-            <div class="mt-8 flex items-center gap-x-4">
-              <img src="./I/camara.jpg" alt="" class="h-10 w-10 rounded-full bg-gray-50">
-              <div class="text-sm leading-6">
-                <p class="font-semibold text-gray-900">
-                  <a href="./projets.html">
-                    <span class=" inset-0"></span>
-                    Camara Saidou
-                  </a>
-                </p>
-                <p class="text-gray-600">Co-Founder</p>
-              </div>
-            </div>
-            </div>
-           
-        </article>
-          <!--A2-->
-          <article  class="flex p-2 border-white border rounded-2xl max-w-xl flex-col items-start justify-between">
-            
-            <a href="./projets.html" class="">
-              <img src="./I/a20.jpeg" alt="" class="object-cover rounded-2xl w-full max-w-full h-auto block sm:[aspect-ratio:2/1] lg:[aspect-ratio:3/2]">
-              <div class="rounded-2xl absolute"></div>
-            </a>
-
-            <div>
-               <div class="flex items-center gap-x-4 text-xs mt-6">
-              <time datetime="2020-03-16" class="text-gray-500">Avr 02, 2023</time>
-              <a href="./projets.html" class=" rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100">Solaire</a>
-            </div>
-            <div class="group  ">
-              <h3 class="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
-                <a href="./projets.html">
-                  <span class=" inset-0"></span>
-                  Activité
-                </a>
-              </h3>
-              <p class="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">
-                Installation d’un système 15kWc avec un stockage de 45kWc au lithium
-              </p>
-            </div>
-            <div class="mt-8 flex items-center gap-x-4">
-              <img src="./I/camara.jpg" alt="" class="h-10 w-10 rounded-full bg-gray-50">
-              <div class="text-sm leading-6">
-                <p class="font-semibold text-gray-900">
-                  <a href="./projets.html">
-                    <span class=" inset-0"></span>
-                    Camara Saidou
-                  </a>
-                </p>
-                <p class="text-gray-600">Co-Founder</p>
-              </div>
-            </div>
-            </div>
-           
-        </article>
-          <!--A3-->
-          <article  class="flex p-2 border-white border rounded-2xl max-w-xl flex-col items-start justify-between">
-            
-            <a href="./projets.html" class="">
-              <img src="./I/a32.jpg" alt="" class="object-cover rounded-2xl w-full max-w-full h-auto block sm:[aspect-ratio:2/1] lg:[aspect-ratio:3/2]">
-              <div class="rounded-2xl absolute"></div>
-            </a>
-
-            <div>
-               <div class="flex items-center gap-x-4 text-xs mt-6">
-              <time datetime="2020-03-16" class="text-gray-500">Mai 08, 2023</time>
-              <a href="./projets.html" class=" rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100">Solaire</a>
-            </div>
-            <div class="group  ">
-              <h3 class="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
-                <a href="./projets.html">
-                  <span class=" inset-0"></span>
-                  Activité
-                </a>
-              </h3>
-              <p class="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">
-                Réalisation et installation d’un système solaire de 3,9 kWc à Missabougou en 2023 pour un particulier ;
-              </p>
-            </div>
-            <div class="mt-8 flex items-center gap-x-4">
-              <img src="./I/camara.jpg" alt="" class="h-10 w-10 rounded-full bg-gray-50">
-              <div class="text-sm leading-6">
-                <p class="font-semibold text-gray-900">
-                  <a href="./projets.html">
-                    <span class=" inset-0"></span>
-                    Camara Saidou
-                  </a>
-                </p>
-                <p class="text-gray-600">Co-Founder</p>
-              </div>
-            </div>
-            </div>
-           
-        </article>
-          <!--A4-->
-          <article  class="flex p-2 border-white border rounded-2xl max-w-xl flex-col items-start justify-between">
-            
-            <a href="./projets.html" class="">
-              <img src="./I/a43.jpg" alt="" class="object-cover rounded-2xl w-full max-w-full h-auto block sm:[aspect-ratio:2/1] lg:[aspect-ratio:3/2]">
-              <div class="rounded-2xl absolute"></div>
-            </a>
-
-            <div>
-               <div class="flex items-center gap-x-4 text-xs mt-6">
-              <time datetime="2020-03-16" class="text-gray-500">Mai 08, 2023</time>
-              <a href="./projets.html" class=" rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100">Eclairage PV</a>
-            </div>
-            <div class="group  ">
-              <h3 class="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
-                <a href="./projets.html">
-                  <span class=" inset-0"></span>
-                  Activité
-                </a>
-              </h3>
-              <p class="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">
-                Réalisations de quelques lampadaires solaires à Bamako et environs
-              </p>
-            </div>
-            <div class="mt-8 flex items-center gap-x-4">
-              <img src="./I/camara.jpg" alt="" class="h-10 w-10 rounded-full bg-gray-50">
-              <div class="text-sm leading-6">
-                <p class="font-semibold text-gray-900">
-                  <a href="./projets.html">
-                    <span class=" inset-0"></span>
-                    Camara Saidou
-                  </a>
-                </p>
-                <p class="text-gray-600">Co-Founder</p>
-              </div>
-            </div>
-            </div>
-           
-        </article>
-          <!--A5-->
-          <article  class="flex p-2 border-white border rounded-2xl max-w-xl flex-col items-start justify-between">
-            
-            <a href="./projets.html" class="">
-              <img src="./I/a51.jpg" alt="" class="object-cover rounded-2xl w-full max-w-full h-auto block sm:[aspect-ratio:2/1] lg:[aspect-ratio:3/2]">
-              <div class="rounded-2xl absolute"></div>
-            </a>
-
-            <div>
-               <div class="flex items-center gap-x-4 text-xs mt-6">
-              <time datetime="2020-03-16" class="text-gray-500">Mai 08, 2023</time>
-              <a href="./projets.html" class=" rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100">Eclairage PV</a>
-            </div>
-            <div class="group  ">
-              <h3 class="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
-                <a href="./projets.html">
-                  <span class=" inset-0"></span>
-                  Activité
-                </a>
-              </h3>
-              <p class="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">
-                Réalisations de quelques lampadaires solaires à Bamako et environs
-              </p>
-            </div>
-            <div class="mt-8 flex items-center gap-x-4">
-              <img src="./I/camara.jpg" alt="" class="h-10 w-10 rounded-full bg-gray-50">
-              <div class="text-sm leading-6">
-                <p class="font-semibold text-gray-900">
-                  <a href="./projets.html">
-                    <span class=" inset-0"></span>
-                    Camara Saidou
-                  </a>
-                </p>
-                <p class="text-gray-600">Co-Founder</p>
-              </div>
-            </div>
-            </div>
-           
-        </article>
-          <!--A6-->
-          <article  class="flex p-2 border-white border rounded-2xl max-w-xl flex-col items-start justify-between">
-            
-            <a href="./projets.html" class="">
-              <img src="./I/a61.jpg" alt="" class="object-cover rounded-2xl w-full max-w-full h-auto block sm:[aspect-ratio:2/1] lg:[aspect-ratio:3/2]">
-              <div class="rounded-2xl absolute"></div>
-            </a>
-
-            <div>
-               <div class="flex items-center gap-x-4 text-xs mt-6">
-              <time datetime="2020-03-16" class="text-gray-500">Dec 03, 2022</time>
-              <a href="./projets.html" class=" rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100">Solaire</a>
-            </div>
-            <div class="group  ">
-              <h3 class="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
-                <a href="./projets.html">
-                  <span class=" inset-0"></span>
-                  Activité
-                </a>
-              </h3>
-              <p class="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">
-                Reconfiguration d’un système de  28,75 KWc avec un stockage et 115,2 kWh Gel à Sanakoroba en Décembre 2022
-              </p>
-            </div>
-            <div class="mt-8 flex items-center gap-x-4">
-              <img src="./I/camara.jpg" alt="" class="h-10 w-10 rounded-full bg-gray-50">
-              <div class="text-sm leading-6">
-                <p class="font-semibold text-gray-900">
-                  <a href="./projets.html">
-                    <span class=" inset-0"></span>
-                    Camara Saidou
-                  </a>
-                </p>
-                <p class="text-gray-600">Co-Founder</p>
-              </div>
-            </div>
-            </div>
-           
-        </article>
-
-          <!-- More posts... -->
-       </div>
-
-  </div>
-
-</section>
-
-<!-- Meet our Team -->
-<section >
-  <div class="bg-zinc-950 py-16 sm:py-23 mt-16">
-    <div class="px-6 pb-6 max-w-2xl mx-auto text-center">
-        <h2 class="text-3xl font-bold tracking-tight text-gray-300 sm:text-4xl">Notre équipe</h2>
-        <p class="mt-6 md:text-lg leading-8 text-gray-400">
-          Nous sommes un groupe dynamique de personnes passionnées par ce que nous faisons et déterminées à fournir les meilleurs résultats à nos clients.        </p>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num">50<span>+</span></div>
+        <div class="stat-label">Projets réalisés</div>
       </div>
-      <div class="">
-      <ul role="list" class="px-6 mx-auto grid max-w-7xl gap-8 lg:px-8 xl:grid-cols-3 ">
-        <li>
-          <div class="flex flex-col items-center justify-center bg-gray-800 px-8 py-10 rounded-2xl">
-            <img class="h-56 w-56 rounded-full" src="./I/camara.jpg" alt="">
-               <h3 class="text-base  mt-6 font-semibold leading-7 tracking-tight text-gray-400">CAMARA Saïdou</h3>
-              <p class="text-sm font-semibold leading-6 text-gray-600">Gérant</p>
-              <p class="text-sm font-semibold leading-6 text-gray-600">Je suis Saidou Camara, détenteur d’un Master en énergies renouvelables à l’Université de Maradi au Niger depuis 2020. J'ai commencé ma carrière professionnelle à l’Agence Nationale des Énergies Renouvelables comme stagiaire en 2018; par la suite j’ai occupé plusieurs autres postes dans différentes entreprises et ONG notamment comme coordinateur des projets d’environnement et de développement durable de 2020 à 2021 à l’ONG ERADD-Mali(Équipe de Recherche et Action pour le Développement Durable), et responsable des activités d’Audits énergétique dans les bâtiments publics au Mali au sein de l’entreprise AIRCOM-Mali en 2022. Ambitieux j'ai décidé de me lancer dans l'entrepreneuriat en créant ma propre entreprise « CAMARA SERVICES » en 2023, qui offre des services dans le domaine de l’ingénierie plus précisément l’énergie solaire photovoltaïque.
-                Cependant je suis Chef de projet de l’Association des Jeunes Africains Responsables pour le développement de l’Afrique depuis 2019, et aussi membre actif de l’Association des Jeunes Acteurs de l’Energie du Mali.</p>
-              <ul role="list" class="flex mt-6 gap-8">
-               <!---- <li><a href="#" class="text-gray-400 bky"><svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"><path d="M11.4678 8.77491L17.2961 2H15.915L10.8543 7.88256L6.81232 2H2.15039L8.26263 10.8955L2.15039 18H3.53159L8.87581 11.7878L13.1444 18H17.8063L11.4675 8.77491H11.4678ZM9.57608 10.9738L8.95678 10.0881L4.02925 3.03974H6.15068L10.1273 8.72795L10.7466 9.61374L15.9156 17.0075H13.7942L9.57608 10.9742V10.9738Z"></path></svg></a></li>-->
-                <li><a href="https://linkedin.com/in/saïdou-camara-75a91b66" class="text-gray-400 bky"><svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.338 16.338H13.67V12.16c0-.995-.017-2.277-1.387-2.277-1.39 0-1.601 1.086-1.601 2.207v4.248H8.014v-8.59h2.559v1.174h.037c.356-.675 1.227-1.387 2.526-1.387 2.703 0 3.203 1.778 3.203 4.092v4.711zM5.005 6.575a1.548 1.548 0 11-.003-3.096 1.548 1.548 0 01.003 3.096zm-1.337 9.763H6.34v-8.59H3.667v8.59zM17.668 1H2.328C1.595 1 1 1.581 1 2.298v15.403C1 18.418 1.595 19 2.328 19h15.34c.734 0 1.332-.582 1.332-1.299V2.298C19 1.581 18.402 1 17.668 1z" clip-rule="evenodd"></path></svg></a></li></ul>
-           </div>
-
-
-           
-            
-
-        </li>
-        <li>
-          <div class="flex flex-col items-center justify-center bg-gray-800 px-8 py-10 rounded-2xl">
-            <img class="h-56 w-56 rounded-full" src="./I/Kadi.jpg" alt="">
-               <h3 class="text-base  mt-6 font-semibold leading-7 tracking-tight text-gray-400">Kadidiatou Coulibaly</h3>
-              <p class="text-center text-sm font-semibold leading-6 text-gray-600">Ayant une experience de plus de 10 ans dans la gestion commerciale et finaciere , je m'occupe des questions financières de Camara Services. </p>
-              <ul role="list" class="flex mt-6 gap-8">
-                <li><a href="#" class="text-gray-400 bky"><svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"><path d="M11.4678 8.77491L17.2961 2H15.915L10.8543 7.88256L6.81232 2H2.15039L8.26263 10.8955L2.15039 18H3.53159L8.87581 11.7878L13.1444 18H17.8063L11.4675 8.77491H11.4678ZM9.57608 10.9738L8.95678 10.0881L4.02925 3.03974H6.15068L10.1273 8.72795L10.7466 9.61374L15.9156 17.0075H13.7942L9.57608 10.9742V10.9738Z"></path></svg></a></li>
-                <li><a href="#" class="text-gray-400 bky"><svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.338 16.338H13.67V12.16c0-.995-.017-2.277-1.387-2.277-1.39 0-1.601 1.086-1.601 2.207v4.248H8.014v-8.59h2.559v1.174h.037c.356-.675 1.227-1.387 2.526-1.387 2.703 0 3.203 1.778 3.203 4.092v4.711zM5.005 6.575a1.548 1.548 0 11-.003-3.096 1.548 1.548 0 01.003 3.096zm-1.337 9.763H6.34v-8.59H3.667v8.59zM17.668 1H2.328C1.595 1 1 1.581 1 2.298v15.403C1 18.418 1.595 19 2.328 19h15.34c.734 0 1.332-.582 1.332-1.299V2.298C19 1.581 18.402 1 17.668 1z" clip-rule="evenodd"></path></svg></a></li></ul>
-           </div>
-        </li>
-        
-        
-        <!-- More people... -->
-       
-  
-        
-        <li>
-          <div class="flex flex-col items-center justify-center bg-gray-800 px-8 py-10 rounded-2xl">
-            <img class="h-56 w-56 rounded-full" src="./I/dirtech.jpg" alt="">
-               <h3 class="text-base  mt-6 font-semibold leading-7 tracking-tight text-gray-400">Cheick Ahmed Tidiane Kouyaté</h3>
-               <p class="text-sm font-semibold leading-6 text-gray-600"> Directeur technique adjoint</p>
-              <p class="text-center text-sm font-semibold leading-6 text-gray-600">Ambitieux j’aimerai contribuer à l’indépendance énergétique du Mali avec l’intégration de l’énergie solaire dans le mixte énergétique.</p>
-              <ul role="list" class="flex mt-6 gap-8">
-                <li><a href="#" class="text-gray-400 bky"><svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"><path d="M11.4678 8.77491L17.2961 2H15.915L10.8543 7.88256L6.81232 2H2.15039L8.26263 10.8955L2.15039 18H3.53159L8.87581 11.7878L13.1444 18H17.8063L11.4675 8.77491H11.4678ZM9.57608 10.9738L8.95678 10.0881L4.02925 3.03974H6.15068L10.1273 8.72795L10.7466 9.61374L15.9156 17.0075H13.7942L9.57608 10.9742V10.9738Z"></path></svg></a></li>
-                <li><a href="#" class="text-gray-400 bky"><svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.338 16.338H13.67V12.16c0-.995-.017-2.277-1.387-2.277-1.39 0-1.601 1.086-1.601 2.207v4.248H8.014v-8.59h2.559v1.174h.037c.356-.675 1.227-1.387 2.526-1.387 2.703 0 3.203 1.778 3.203 4.092v4.711zM5.005 6.575a1.548 1.548 0 11-.003-3.096 1.548 1.548 0 01.003 3.096zm-1.337 9.763H6.34v-8.59H3.667v8.59zM17.668 1H2.328C1.595 1 1 1.581 1 2.298v15.403C1 18.418 1.595 19 2.328 19h15.34c.734 0 1.332-.582 1.332-1.299V2.298C19 1.581 18.402 1 17.668 1z" clip-rule="evenodd"></path></svg></a></li></ul>
-           </div>
-        </li>
-        
-      <!--More members-->
-
-      <li>
-        <div class="flex flex-col items-center justify-center bg-gray-800 px-8 py-10 rounded-2xl">
-          <img class="h-56 w-56 rounded-full" src="./I/Malamine.jpeg" alt="">
-             <h3 class="text-base  mt-6 font-semibold leading-7 tracking-tight text-gray-400">Malamine Coulibaly</h3>
-            <p class="text-center text-sm font-semibold leading-6 text-gray-600">Ayant une licence en Energie rénouvelable ,je m'occupe des installations et suivi techniques de Camara Services </p>
-            <ul role="list" class="flex mt-6 gap-8">
-              <li><a href="#" class="text-gray-400 bky"><svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"><path d="M11.4678 8.77491L17.2961 2H15.915L10.8543 7.88256L6.81232 2H2.15039L8.26263 10.8955L2.15039 18H3.53159L8.87581 11.7878L13.1444 18H17.8063L11.4675 8.77491H11.4678ZM9.57608 10.9738L8.95678 10.0881L4.02925 3.03974H6.15068L10.1273 8.72795L10.7466 9.61374L15.9156 17.0075H13.7942L9.57608 10.9742V10.9738Z"></path></svg></a></li>
-              <li><a href="#" class="text-gray-400 bky"><svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.338 16.338H13.67V12.16c0-.995-.017-2.277-1.387-2.277-1.39 0-1.601 1.086-1.601 2.207v4.248H8.014v-8.59h2.559v1.174h.037c.356-.675 1.227-1.387 2.526-1.387 2.703 0 3.203 1.778 3.203 4.092v4.711zM5.005 6.575a1.548 1.548 0 11-.003-3.096 1.548 1.548 0 01.003 3.096zm-1.337 9.763H6.34v-8.59H3.667v8.59zM17.668 1H2.328C1.595 1 1 1.581 1 2.298v15.403C1 18.418 1.595 19 2.328 19h15.34c.734 0 1.332-.582 1.332-1.299V2.298C19 1.581 18.402 1 17.668 1z" clip-rule="evenodd"></path></svg></a></li></ul>
-         </div>
-      </li>
-     <!--<li>
-        <div class="flex flex-col items-center justify-center bg-gray-800 px-8 py-10 rounded-2xl">
-          <img class="h-56 w-56 rounded-full" src="./I/coulibali.jpeg" alt="">
-             <h3 class="text-base  mt-6 font-semibold leading-7 tracking-tight text-gray-400">COULIBALY Emmanuel</h3>
-            <p class="text-sm font-semibold leading-6 text-gray-600">Chercheur / Maitrise en Droit 8 ans d’expériences
-            </p>
-            <ul role="list" class="flex mt-6 gap-8">
-              <li><a href="#" class="text-gray-400  "><svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"><path d="M11.4678 8.77491L17.2961 2H15.915L10.8543 7.88256L6.81232 2H2.15039L8.26263 10.8955L2.15039 18H3.53159L8.87581 11.7878L13.1444 18H17.8063L11.4675 8.77491H11.4678ZM9.57608 10.9738L8.95678 10.0881L4.02925 3.03974H6.15068L10.1273 8.72795L10.7466 9.61374L15.9156 17.0075H13.7942L9.57608 10.9742V10.9738Z"></path></svg></a></li>
-              <li><a href="#" class="text-gray-400  "><svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.338 16.338H13.67V12.16c0-.995-.017-2.277-1.387-2.277-1.39 0-1.601 1.086-1.601 2.207v4.248H8.014v-8.59h2.559v1.174h.037c.356-.675 1.227-1.387 2.526-1.387 2.703 0 3.203 1.778 3.203 4.092v4.711zM5.005 6.575a1.548 1.548 0 11-.003-3.096 1.548 1.548 0 01.003 3.096zm-1.337 9.763H6.34v-8.59H3.667v8.59zM17.668 1H2.328C1.595 1 1 1.581 1 2.298v15.403C1 18.418 1.595 19 2.328 19h15.34c.734 0 1.332-.582 1.332-1.299V2.298C19 1.581 18.402 1 17.668 1z" clip-rule="evenodd"></path></svg></a></li></ul>
-         </div>
-      </li> -->
-      </ul>
+      <div class="stat">
+        <div class="stat-num">2<span>+</span></div>
+        <div class="stat-label">Années d'expérience</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">4</div>
+        <div class="stat-label">Partenaires majeurs</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">100<span>%</span></div>
+        <div class="stat-label">Énergie propre</div>
+      </div>
     </div>
   </div>
 </section>
- 
 
-<!--Our partenaire-->
-<div class="py-8 lg:py-16 mx-auto max-w-screen-xl px-4">
-  <h2 class="mb-8 lg:mb-16 text-xl font-thin tracking-tight leading-tight text-center text-gray-400 md:text-3xl">
-      Vous êtes à la recherche d'expertise en solution énergétique durable ? Vous êtes en bonne compagnie, nous avons travaillé avec les entreprises ci-dessous :
-  </h2>
-  <div class="flex flex-wrap justify-center items-center gap-16 text-gray-500 dark:text-gray-400">
-      <a href="https://borda.org/" class="flex justify-center items-center">
-        <img src="./logo/borda.jpeg" alt="Borda" class="w-32 h-32 object-contain mx-auto transform transition duration-300 hover:scale-110 hover:rotate-2">
-        </a>
-
-      <a href="https://www.orangemali.com" class="flex justify-center items-center">
-          <img src="./logo/orange.svg" alt="Orange" class="w-32 h-32 object-contain transform transition duration-300 hover:scale-110 hover:-rotate-2">
+<!-- SERVICES -->
+<section>
+  <div class="section-inner">
+    <div class="fade-up">
+      <div class="section-tag">Nos services</div>
+      <h2 class="section-title">Ce que nous offrons</h2>
+      <p class="section-desc">Des solutions énergétiques complètes, de l'étude à l'installation, pour particuliers et professionnels.</p>
+    </div>
+    <div class="services-grid">
+      <a href="./etude.html" class="service-card fade-up">
+        <div class="service-icon">🔍</div>
+        <div class="service-title">Étude & Diagnostic</div>
+        <div class="service-desc">Analyse de faisabilité, dimensionnement sur mesure et plans d'installation détaillés.</div>
+        <div class="service-arrow">→</div>
       </a>
-      <a href="https://www.iom.int/" class="flex justify-center items-center">
-        <img src="./logo/oim-iom-logo-png_seeklogo-102524.webp" alt="OIM" class="w-32 h-32 object-contain transform transition duration-300 hover:scale-110 hover:-rotate-2">
-    </a>
-    <a href="https://www.undp.org/" class="flex justify-center items-center">
-      <img src="./logo/UNDP_logo.webp" alt="OIM" class="w-32 h-32 object-contain transform transition duration-300 hover:scale-110 hover:-rotate-2">
-  </a>
-  </div>
-</div>
-
-  </section>
-        
-<!-- Footer -->
-<footer
-class="text-center text-surface/75 text-white lg:text-left"
-style="background-image: url(./sl.jpeg); background-repeat: no-repeat; background-size: cover;"
->
-<!-- Social media section -->
-<div
-  class="flex items-center justify-center border-b-2 border-neutral-200 p-6 dark:border-white/10 lg:justify-between"
->
-  <div class="me-12 hidden lg:block">
-    <span>Rejoignez-nous sur les réseaux sociaux :</span>
-  </div>
-  <div class="flex justify-center">
-    <a href="https://m.facebook.com/profile.php?id=100082876795747" class="me-6 [&>svg]:h-4 [&>svg]:w-4">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 320 512">
-        <path d="M80 299.3V512H196V299.3h86.5l18-97.8H196V166.9c0-51.7 20.3-71.5 72.7-71.5c16.3 0 29.4 .4 37 1.2V7.9C291.4 4 256.4 0 236.2 0C129.3 0 80 50.5 80 159.4v42.1H14v97.8H80z" />
-      </svg>
-    </a>
-    <a href="https://www.x.com/CamaraServices" class="me-6 [&>svg]:h-4 [&>svg]:w-4">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 512 512">
-        <path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z" />
-      </svg>
-    </a>
-    <a href="https://www.instagram.com/CamaraServices" class="me-6 [&>svg]:h-4 [&>svg]:w-4">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 448 512">
-        <path
-          d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"
-        />
-      </svg>
-    </a>
-    <a href="https://www.linkedin.com/company/camara-services-sarl" class="me-6 [&>svg]:h-4 [&>svg]:w-4">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 448 512">
-        <path d="M100.3 448H7.4V148.9h92.9zM53.8 108.1C24.1 108.1 0 83.5 0 53.8a53.8 53.8 0 0 1 107.6 0c0 29.7-24.1 54.3-53.8 54.3zM447.9 448h-92.7V302.4c0-34.7-.7-79.2-48.3-79.2-48.3 0-55.7 37.7-55.7 76.7V448h-92.8V148.9h89.1v40.8h1.3c12.4-23.5 42.7-48.3 87.9-48.3 94 0 111.3 61.9 111.3 142.3V448z" />
-      </svg>
-    </a>
-  </div>
-</div>
-
-<!-- Main container -->
-<div class="mx-6 py-10 text-center md:text-left">
-  <div class="grid-1 grid gap-8 md:grid-cols-3 lg:grid-cols-3">
-    <!-- Left section -->
-    <div class="">
-      <h6 class="mb-4 flex items-center justify-center font-semibold uppercase md:justify-start">
-        <span class="me-3 [&>svg]:h-4 [&>svg]:w-4">
-          <img src="./logo2.png" class="w-16" alt="" />
-        </span>
-        CamaraServices
-      </h6>
-      <p>Une entreprise spécialisée dans l'offre des services énergétiques durables.</p>
-    </div>
-
-    <!-- Center section -->
-<div class="text-center">
-  <h6 class="mb-4 font-semibold uppercase">Services</h6>
-  <p class="mb-4">
-    <a href="./etude.html" class="hover:underline">Étude</a>
-  </p>
-  <p class="mb-4">
-    <a href="./installlation.html" class="hover:underline">Installation</a>
-  </p>
-  <p class="mb-4">
-    <a href="./vente.html" class="hover:underline">Vente</a>
-  </p>
-  <p>
-    <a href="./conseil.html" class="hover:underline">Conseil</a>
-  </p>
-</div>
-
-    <!-- Right section (Contact) -->
-    <div>
-      <p class="mb-4 flex items-center justify-center md:justify-start">
-        <span class="me-3 [&>svg]:h-5 [&>svg]:w-5">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-            <path
-              d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z"
-            />
-            <path
-              d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00.091-.086L12 5.43z"
-            />
-          </svg>
-        </span>
-       Baco-Djicoroni ACI -  vers la Banque " Bank Of Africa (BOA)"
-      </p>
-      <p class="mb-4 flex items-center justify-center md:justify-start">
-        <span class="me-3 [&>svg]:h-5 [&>svg]:w-5">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-            <path
-              d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z"
-            />
-            <path
-              d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z"
-            />
-          </svg>
-        </span>
-        <a href="mailto:contact@camara-services.com">contact@camara-services.com</a>
-      </p>
-      <p class="mb-4 flex items-center justify-center md:justify-start">
-        <span class="me-3 [&>svg]:h-5 [&>svg]:w-5">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-            <path
-              fill-rule="evenodd"
-              d="M1.5 4.5a3 3 0 013-3h1.372c.86 0 1.61.586 1.819 1.42l1.105 4.423a1.875 1.875 0 01-.694 1.955l-1.293.97c-.135.101-.164.249-.126.352a11.285 11.285 0 006.697 6.697c.103.038.25.009.352-.126l.97-1.293a1.875 1.875 0 011.955-.694l4.423 1.105c.834.209 1.42.959 1.42 1.82V19.5a3 3 0 01-3 3h-2.25C8.552 22.5 1.5 15.448 1.5 6.75V4.5z"
-              clip-rule="evenodd"
-            />
-          </svg>
-        </span>
-        +223 92 82 89 79 / 78 14 61 71
-      </p>
+      <a href="./installlation.html" class="service-card fade-up">
+        <div class="service-icon">⚡</div>
+        <div class="service-title">Installation</div>
+        <div class="service-desc">Pose de panneaux photovoltaïques, onduleurs, batteries lithium et systèmes autonomes.</div>
+        <div class="service-arrow">→</div>
+      </a>
+      <a href="./vente.html" class="service-card fade-up">
+        <div class="service-icon">🛒</div>
+        <div class="service-title">Vente</div>
+        <div class="service-desc">Fourniture de matériel solaire de qualité : panneaux, batteries, onduleurs et accessoires.</div>
+        <div class="service-arrow">→</div>
+      </a>
+      <a href="./conseil.html" class="service-card fade-up">
+        <div class="service-icon">💡</div>
+        <div class="service-title">Conseil</div>
+        <div class="service-desc">Accompagnement stratégique pour optimiser votre transition vers les énergies renouvelables.</div>
+        <div class="service-arrow">→</div>
+      </a>
     </div>
   </div>
-</div>
+</section>
 
-<!-- Copyright -->
-<div class="bg-black/5 p-6 text-center">
-  <span>© <script>document.write(new Date().getFullYear())</script> Copyright:</span>
-  <a class="font-semibold" href="https://www.camara-services.com/">CamaraServices</a>
-</div>
+<!-- ACTIVITIES -->
+<section style="background:var(--bg2);">
+  <div class="section-inner">
+    <div class="fade-up" style="display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:1rem; margin-bottom:3rem;">
+      <div>
+        <div class="section-tag">Activités récentes</div>
+        <h2 class="section-title">Nos dernières réalisations</h2>
+      </div>
+      <a href="./projets.html" class="btn-secondary">Voir tous les projets →</a>
+    </div>
+    <div class="activities-grid">
+      <a href="./projets.html" class="activity-card fade-up">
+        <div class="activity-img">
+          <img src="./I/a11.jpg" alt="Forage Sirakoro" loading="lazy">
+          <div class="activity-img-overlay"></div>
+          <span class="activity-tag">Forage</span>
+        </div>
+        <div class="activity-body">
+          <div class="activity-date">Mars 2023</div>
+          <div class="activity-title">Forage solaire à Sirakoro</div>
+          <div class="activity-desc">Réalisation et installation d'un forage pour un particulier avec pompage solaire.</div>
+        </div>
+      </a>
+      <a href="./projets.html" class="activity-card fade-up">
+        <div class="activity-img">
+          <img src="./I/a20.jpeg" alt="Système 15kWc" loading="lazy">
+          <div class="activity-img-overlay"></div>
+          <span class="activity-tag">Solaire</span>
+        </div>
+        <div class="activity-body">
+          <div class="activity-date">Avril 2023</div>
+          <div class="activity-title">Système 15 kWc + stockage lithium 45 kWh</div>
+          <div class="activity-desc">Installation complète avec batterie lithium haute capacité pour autonomie totale.</div>
+        </div>
+      </a>
+      <a href="./projets.html" class="activity-card fade-up">
+        <div class="activity-img">
+          <img src="./I/a32.jpg" alt="Solaire Missabougou" loading="lazy">
+          <div class="activity-img-overlay"></div>
+          <span class="activity-tag">Solaire</span>
+        </div>
+        <div class="activity-body">
+          <div class="activity-date">Mai 2023</div>
+          <div class="activity-title">Système 3,9 kWc à Missabougou</div>
+          <div class="activity-desc">Installation photovoltaïque résidentielle clé en main à Missabougou.</div>
+        </div>
+      </a>
+      <a href="./projets.html" class="activity-card fade-up">
+        <div class="activity-img">
+          <img src="./I/a43.jpg" alt="Lampadaires solaires" loading="lazy">
+          <div class="activity-img-overlay"></div>
+          <span class="activity-tag">Éclairage PV</span>
+        </div>
+        <div class="activity-body">
+          <div class="activity-date">Mai 2023</div>
+          <div class="activity-title">Lampadaires solaires à Bamako</div>
+          <div class="activity-desc">Réalisation de lampadaires solaires dans Bamako et ses environs.</div>
+        </div>
+      </a>
+      <a href="./projets.html" class="activity-card fade-up">
+        <div class="activity-img">
+          <img src="./I/a61.jpg" alt="Reconfiguration Sanakoroba" loading="lazy">
+          <div class="activity-img-overlay"></div>
+          <span class="activity-tag">Solaire</span>
+        </div>
+        <div class="activity-body">
+          <div class="activity-date">Décembre 2022</div>
+          <div class="activity-title">Reconfiguration 28,75 kWc à Sanakoroba</div>
+          <div class="activity-desc">Reconfiguration avec stockage gel 115,2 kWh pour une autonomie optimale.</div>
+        </div>
+      </a>
+      <a href="./projets.html" class="activity-card fade-up" style="background: linear-gradient(135deg, rgba(255,107,43,0.08), rgba(255,179,71,0.05)); border-color: rgba(255,107,43,0.2);">
+        <div style="height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:2rem; text-align:center; min-height:250px;">
+          <div style="font-size:2.5rem; margin-bottom:1rem;">☀</div>
+          <div style="font-family:'Outfit',sans-serif; font-weight:700; font-size:1.1rem; margin-bottom:0.5rem;">Voir tous les projets</div>
+          <div style="color:var(--muted); font-size:0.88rem; margin-bottom:1.5rem;">Découvrez l'ensemble de nos réalisations</div>
+          <span class="btn-primary" style="font-size:0.85rem; padding:0.6rem 1.4rem;">Explorer →</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section class="team-section">
+  <div class="section-inner">
+    <div class="fade-up" style="text-align:center; margin-bottom:3rem;">
+      <div class="section-tag" style="justify-content:center;">Notre équipe</div>
+      <h2 class="section-title">Des experts passionnés</h2>
+      <p class="section-desc" style="margin:0 auto;">Une équipe pluridisciplinaire dédiée à votre transition énergétique.</p>
+    </div>
+    <div class="team-grid">
+      <div class="team-card fade-up">
+        <img src="./I/camara.jpg" alt="Camara Saidou" class="team-avatar">
+        <div class="team-name">Camara Saïdou</div>
+        <div class="team-role">Gérant & Directeur Technique</div>
+        <div class="team-bio">Master en Énergies Renouvelables, Université de Maradi. 5+ ans d'expérience en énergie solaire photovoltaïque.</div>
+      </div>
+      <div class="team-card fade-up">
+        <img src="./I/Kadi.jpg" alt="Kadidiatou Coulibaly" class="team-avatar">
+        <div class="team-name">Kadidiatou Coulibaly</div>
+        <div class="team-role">Directrice Financière</div>
+        <div class="team-bio">12 ans d'expérience en gestion commerciale et financière. Juriste et financière de formation.</div>
+      </div>
+      <div class="team-card fade-up">
+        <img src="./I/dirtech.jpg" alt="Cheick Ahmed Kouyaté" class="team-avatar">
+        <div class="team-name">Cheick Ahmed T. Kouyaté</div>
+        <div class="team-role">Directeur Technique Adjoint</div>
+        <div class="team-bio">Licence en Gestion d'entreprise. Ambitionne de contribuer à l'indépendance énergétique du Mali.</div>
+      </div>
+      <div class="team-card fade-up">
+        <img src="./I/Malamine.jpeg" alt="Malamine Coulibaly" class="team-avatar">
+        <div class="team-name">Malamine Coulibaly</div>
+        <div class="team-role">Technicien Installations</div>
+        <div class="team-bio">Licence en Énergie Renouvelable. Responsable des installations et du suivi technique.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARTNERS -->
+<section class="partners-section">
+  <div class="section-inner">
+    <p class="partners-title">Ils nous font confiance</p>
+    <div class="partners-row">
+      <img src="./logo/borda.jpeg" alt="Borda" class="partner-logo">
+      <img src="./logo/orange.svg" alt="Orange Mali" class="partner-logo">
+      <img src="./logo/oim-iom-logo-png_seeklogo-102524.webp" alt="OIM" class="partner-logo">
+      <img src="./logo/UNDP_logo.webp" alt="UNDP" class="partner-logo">
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo">☀ Camara<span>Services</span></div>
+        <p class="footer-tagline">Une entreprise spécialisée dans l'offre des services énergétiques durables. Créée en 2023 à Bamako, Mali.</p>
+        <div class="social-links">
+          <a href="https://m.facebook.com/profile.php?id=100082876795747" class="social-link" aria-label="Facebook">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 320 512"><path d="M80 299.3V512H196V299.3h86.5l18-97.8H196V166.9c0-51.7 20.3-71.5 72.7-71.5c16.3 0 29.4.4 37 1.2V7.9C291.4 4 256.4 0 236.2 0C129.3 0 80 50.5 80 159.4v42.1H14v97.8H80z"/></svg>
+          </a>
+          <a href="https://www.x.com/CamaraServices" class="social-link" aria-label="Twitter/X">
+            <svg width="14" height="14" fill="currentColor" viewBox="0 0 512 512"><path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/></svg>
+          </a>
+          <a href="https://www.instagram.com/CamaraServices" class="social-link" aria-label="Instagram">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 448 512"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg>
+          </a>
+          <a href="https://www.linkedin.com/company/camara-services-sarl" class="social-link" aria-label="LinkedIn">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 448 512"><path d="M100.3 448H7.4V148.9h92.9zM53.8 108.1C24.1 108.1 0 83.5 0 53.8a53.8 53.8 0 0 1 107.6 0c0 29.7-24.1 54.3-53.8 54.3zM447.9 448h-92.7V302.4c0-34.7-.7-79.2-48.3-79.2-48.3 0-55.7 37.7-55.7 76.7V448h-92.8V148.9h89.1v40.8h1.3c12.4-23.5 42.7-48.3 87.9-48.3 94 0 111.3 61.9 111.3 142.3V448z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-heading">Navigation</div>
+        <ul class="footer-links">
+          <li><a href="./index.html">Accueil</a></li>
+          <li><a href="./about.html">À propos</a></li>
+          <li><a href="./projets.html">Projets</a></li>
+          <li><a href="./contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading">Services</div>
+        <ul class="footer-links">
+          <li><a href="./etude.html">Étude</a></li>
+          <li><a href="./installlation.html">Installation</a></li>
+          <li><a href="./vente.html">Vente</a></li>
+          <li><a href="./conseil.html">Conseil</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading">Contact</div>
+        <div class="footer-contact-item">
+          <span class="footer-contact-icon">📍</span>
+          <span class="footer-contact-text">Baco-Djicoroni ACI, vers la Banque BOA — Bamako, Mali</span>
+        </div>
+        <div class="footer-contact-item">
+          <span class="footer-contact-icon">✉</span>
+          <span class="footer-contact-text"><a href="mailto:contact@camara-services.com">contact@camara-services.com</a></span>
+        </div>
+        <div class="footer-contact-item">
+          <span class="footer-contact-icon">📞</span>
+          <span class="footer-contact-text">+223 92 82 89 79 / 78 14 61 71</span>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© <span id="year"></span> <a href="#">CamaraServices SARL</a> — Tous droits réservés</span>
+      <span class="footer-copy">Numéro Ma BKO 2023-M-55 62</span>
+    </div>
+  </div>
 </footer>
 
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
 
-
-
-
-  <script text="javascript">
-    const navbar = document.getElementById('navFixed');
-    const navlogo = document.getElementById('navlogo');
-window.onscroll = () => {
-    if (window.scrollY > 80) {
-        navbar.classList.add('bg-white');
-        navbar.classList.remove('text-white');
-        navbar.classList.add('text-blue-900');
-        navlogo.setAttribute('src', '/logo1.png');
+  // Nav scroll
+  const nav = document.getElementById('mainNav');
+  const cta = document.getElementById('desktopCta');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 60) {
+      nav.classList.add('scrolled');
+      cta.style.display = 'inline-flex';
     } else {
-        navbar.classList.remove('bg-white');
-        navbar.classList.remove('text-blue-900');
-        navbar.classList.add('text-white');
-        navlogo.setAttribute('src', '/logo2.png');
-
+      nav.classList.remove('scrolled');
+      cta.style.display = 'none';
     }
-};
-  </script>
+  });
+
+  // Mobile menu
+  function openMobileMenu() { document.getElementById('mobileMenu').classList.add('open'); }
+  function closeMobileMenu() { document.getElementById('mobileMenu').classList.remove('open'); }
+
+  // Fade-up animation
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
 </body>
 </html>

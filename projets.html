@@ -1,442 +1,286 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Projets - CamaraServices</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <title>Projets — CamaraServices</title>
+  <link rel="icon" type="image/png" href="./assets/favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-    }
-
-    /* Modale Styling */
-    .modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      display: none;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .modal.active {
-      display: flex;
-    }
-
-    .modal-content {
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      max-width: 500px;
-      width: 90%;
-      text-align: center;
-    }
-
-    .modal-close {
-      background: red;
-      color: white;
-      border: none;
-      padding: 8px 12px;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-top: 10px;
-    }
+    :root{--bg:#06090F;--bg2:#0D1220;--card:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.08);--orange:#FF6B2B;--orange2:#FF8C55;--gold:#FFB347;--text:#F0F4FF;--muted:#8892A4;}
+    *{margin:0;padding:0;box-sizing:border-box;} html{scroll-behavior:smooth;}
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;}
+    h1,h2,h3,h4,h5{font-family:'Outfit',sans-serif;}
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.2rem 2rem;background:rgba(6,9,15,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+    .nav-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;}
+    .nav-logo{font-family:'Outfit',sans-serif;font-weight:800;font-size:1.3rem;color:var(--text);text-decoration:none;}
+    .nav-logo span{color:var(--orange);}
+    .nav-links{display:flex;gap:2.5rem;list-style:none;}
+    .nav-links a{font-family:'Outfit',sans-serif;font-weight:500;font-size:0.9rem;color:var(--muted);text-decoration:none;transition:color 0.3s;letter-spacing:0.05em;text-transform:uppercase;}
+    .nav-links a:hover{color:var(--text);} .nav-links a.active{color:var(--orange);}
+    .btn-primary{background:var(--orange);color:white;padding:0.75rem 1.8rem;border-radius:100px;font-family:'Outfit',sans-serif;font-weight:700;font-size:0.95rem;text-decoration:none;transition:all 0.3s;display:inline-flex;align-items:center;gap:0.5rem;}
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(255,107,43,0.4);}
+    ::-webkit-scrollbar{width:6px;} ::-webkit-scrollbar-track{background:var(--bg);} ::-webkit-scrollbar-thumb{background:rgba(255,107,43,0.4);border-radius:3px;}
+    .fade-up{opacity:0;transform:translateY(30px);transition:all 0.7s ease;} .fade-up.visible{opacity:1;transform:translateY(0);}
+    .project-block{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;padding:4rem 0;border-bottom:1px solid var(--border);}
+    .project-block:last-child{border-bottom:none;}
+    .project-block.reverse{direction:rtl;} .project-block.reverse>*{direction:ltr;}
+    .project-gallery{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-top:1.5rem;}
+    .project-gallery img{width:100%;height:100px;object-fit:cover;border-radius:12px;border:1px solid var(--border);transition:transform 0.3s;cursor:pointer;}
+    .project-gallery img:hover{transform:scale(1.02);}
+    .tag{display:inline-block;background:rgba(255,107,43,0.12);color:var(--orange);padding:0.3rem 0.9rem;border-radius:100px;font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:1rem;}
+    .project-img-main{border-radius:20px;overflow:hidden;border:1px solid var(--border);position:relative;}
+    .project-img-main img{width:100%;height:380px;object-fit:cover;transition:transform 0.6s ease;display:block;}
+    .project-img-main:hover img{transform:scale(1.04);}
+    .project-img-main::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(6,9,15,0.6) 0%,transparent 40%);}
+    .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;}
+    .hamburger span{display:block;width:24px;height:2px;background:var(--text);border-radius:2px;}
+    @media(max-width:1024px){.project-block,.project-block.reverse{grid-template-columns:1fr;direction:ltr;}}
+    @media(max-width:768px){.hamburger{display:flex;}.nav-links{display:none;}.mobile-menu{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg);z-index:200;flex-direction:column;align-items:center;justify-content:center;gap:2rem;}.mobile-menu.open{display:flex;}.mobile-menu a{font-family:'Outfit',sans-serif;font-size:1.8rem;font-weight:700;color:var(--text);text-decoration:none;text-transform:uppercase;}.mobile-menu a.active{color:var(--orange);}.mobile-close{position:absolute;top:1.5rem;right:1.5rem;font-size:1.5rem;color:var(--muted);background:none;border:none;cursor:pointer;}}
+    /* Lightbox */
+    .lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:1000;align-items:center;justify-content:center;} .lightbox.open{display:flex;}
+    .lightbox img{max-width:90vw;max-height:90vh;border-radius:12px;object-fit:contain;}
+    .lightbox-close{position:absolute;top:1.5rem;right:1.5rem;color:white;font-size:2rem;cursor:pointer;background:none;border:none;}
   </style>
 </head>
-<body class="bg-[#E4E7EC]">
-  <!-- Header -->
-  <section class="h-[100px] bg-center bg-cover bg-no-repeat">
-    <nav id="navFixed" class="text-white p-4 fixed top-0 left-0 right-0 border-b border-[#1B3F7E]" style="background-image: url('./sld.jpg'); background-repeat: no-repeat; background-size: cover;">
-      <div class="container md:px-28 mx-auto flex justify-between items-center">
-        <a href="#" class="text-white font-semibold text-xl">
-          <img id="navlogo" class="md:w-28 w-8" src="./logo1.png" alt="" srcset="./logo1.png">
-        </a>
-        <ul class="flex md:space-x-4 space-x-2 font-bold">
-          <li><a href="./index.html" class="text-xs md:text-lg pb-2 hover:text-orange-600">Accueil</a></li>
-          <li><a href="./about.html" class="text-xs md:text-lg pb-2 hover:text-orange-600">A propos</a></li>
-          
-          <li><a href="./projets.html" class="text-xs md:text-lg pb-2 hover:text-orange-600 border-b-4 md:pb-9 border-orange-500">Projets</a></li>
-          <li><a href="./contact.html" class="text-xs md:text-lg pb-2 hover:text-orange-600">Contact</a></li>
-        </ul>
-      </div>
-    </nav>
-  </section>
-
-  <!-- Body -->
-  <section class="px-6 md:px-28 lg:my-32">
-    <h1 class="text-3xl font-bold mb-12 text-center text-gray-900">Nos Projets</h1>
-    <div class="space-y-16">
-      <!-- Project 1 -->
-      <div class="flex flex-col lg:flex-row items-center lg:items-start">
-        <img src="./I/a11.jpg" alt="Projet 1" class="w-full lg:w-1/2 rounded-lg shadow-md">
-        <div class="lg:pl-8 mt-6 lg:mt-0">
-          <h2 class="text-2xl font-semibold text-gray-800">Réalisation et installation d’un forage à Sirakoro en 2023 pour un particulier</h2>
-          <p class="mt-4 text-gray-600">
-            Étude préalable et diagnostic :
-            Réalisation d’une étude de faisabilité et analyse géologique afin de déterminer l’emplacement optimal du forage.  
-            Planification et conception :
-            Élaboration d’un plan d’installation détaillé incluant les techniques de forage et les équipements à utiliser.  
-            Réalisation du forage :
-            Mise en œuvre des techniques de forage adaptées aux conditions locales.  
-            Suivi de la qualité de l’eau et vérification des paramètres environnementaux.  
-            Installation et mise en service :
-            Installation du système de pompage et des dispositifs de sécurité.  
-            Réalisation des tests de fonctionnement pour garantir une performance optimale dès la mise en service.  
-            Résultats et retombées :
-            Accès facilité à une eau de qualité pour le particulier.  
-            Optimisation des ressources hydriques locales.  
-            Satisfaction du client et respect des normes en vigueur.
-          </p>
-      
-          <!-- Galerie d'images -->
-          <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
-            <img src="./I/a12.jpg" alt="Image 1" class="w-full h-32 object-cover rounded-lg shadow-md">
-            <img src="./I/a13.jpg" alt="Image 2" class="w-full h-32 object-cover rounded-lg shadow-md">
-            <img src="./I/a14.jpg" alt="Image 3" class="w-full h-32 object-cover rounded-lg shadow-md">
-            <img src="./I/a34.jpg" alt="Image 4" class="w-full h-32 object-cover rounded-lg shadow-md">
-          </div>
-        </div>
-      </div>
-    
-      <!-- Project 2 -->
-      <div class="flex flex-col lg:flex-row-reverse items-center lg:items-start">
-        <img src="./I/a20.jpeg" alt="Projet 2" class="w-full lg:w-1/2 rounded-lg shadow-md">
-        <div class="lg:pr-8 mt-6 lg:mt-0">
-          <h2 class="text-2xl font-semibold text-gray-800">Installation d’un système 15kWc avec un stockage de 45kWc au lithium</h2>
-          <p class="mt-4 text-gray-600">Étude préalable et diagnostic :
-
-            Évaluation des besoins énergétiques du client.
-            Analyse du potentiel solaire et étude de faisabilité.
-            Planification et conception :
-            
-            Dimensionnement du système solaire (2,6 kWc) en fonction de la consommation et des contraintes du site.
-            Élaboration du schéma électrique et plan d’installation.
-            Réalisation de l’installation :
-            
-            Mise en place des panneaux photovoltaïques et de l’onduleur.
-            Raccordement du système au réseau électrique existant  pour à une installation autonome.
-            Mise en service et tests :
-            
-            Vérification du bon fonctionnement du système.
-            Formation du client à l’utilisation et à la maintenance du système.
-            Résultats et retombées :
-            
-            Accès à une énergie propre et renouvelable pour le particulier.
-            Réduction des coûts énergétiques et de l’empreinte environnementale.
-            Renforcement de l’autonomie énergétique du site.</p>
-           <!-- Galerie d'images -->
-           <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
-            <img src="./I/a21.jpeg" alt="Image 1" class="w-full h-32 object-cover rounded-lg shadow-md">
-            <img src="./I/a22.jpeg" alt="Image 2" class="w-full h-32 object-cover rounded-lg shadow-md">
-            <img src="./I/a23.jpeg" alt="Image 3" class="w-full h-32 object-cover rounded-lg shadow-md">
-            <img src="./I/a24.jpeg" alt="Image 4" class="w-full h-32 object-cover rounded-lg shadow-md">
-          </div>
-        </div>
-      </div>
-      <!-- Project 3 -->
-      <div class="flex flex-col lg:flex-row items-center lg:items-start">
-        <img src="./I/a31.jpg" alt="Projet 3" class="w-full lg:w-1/2 rounded-lg shadow-md">
-        <div class="lg:pl-8 mt-6 lg:mt-0">
-          <h2 class="text-2xl font-semibold text-gray-800">Réalisation et installation d’un système solaire de 3,9 kWc à Missabougou en 2023 pour un particulier</h2>
-          <p class="mt-4 text-gray-600">Étude préalable et diagnostic :
-
-            Analyse des besoins énergétiques du client.
-            Étude de faisabilité et évaluation du potentiel solaire du site.
-            Planification et conception :
-            
-            Dimensionnement précis du système (3,9 kWc) en fonction des contraintes du site et de la consommation.
-            Élaboration d’un schéma détaillé de l’installation et du raccordement électrique.
-            Réalisation de l’installation :
-            
-            Montage et installation des panneaux photovoltaïques et de l’onduleur.
-            Raccordement sécurisé du système au réseau électrique existant pour la mise en place d’une solution autonome.
-            Mise en service et vérifications :
-            
-            Réalisation des tests de performance et validation du bon fonctionnement du système.
-            Formation du client à l’utilisation et à la maintenance du système.
-            Résultats et retombées :
-            
-            Accès à une énergie propre et durable pour le particulier.
-            Réduction significative des coûts énergétiques et de l’empreinte environnementale.
-            Renforcement de l’autonomie énergétique du site.
-            </p>
-         <!-- Galerie d'images -->
-         <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
-          <img src="./I/a12.jpg" alt="Image 1" class="w-full h-32 object-cover rounded-lg shadow-md">
-          <img src="./I/a13.jpg" alt="Image 2" class="w-full h-32 object-cover rounded-lg shadow-md">
-          <img src="./I/a14.jpg" alt="Image 3" class="w-full h-32 object-cover rounded-lg shadow-md">
-          <img src="./I/a34.jpg" alt="Image 4" class="w-full h-32 object-cover rounded-lg shadow-md">
-        </div>
-        </div>
-      </div>
-      <!-- Project 4 -->
-      <div class="flex flex-col lg:flex-row-reverse items-center lg:items-start">
-        <img src="./I/a41.jpg" alt="Projet 4" class="w-full lg:w-1/2 rounded-lg shadow-md">
-        <div class="lg:pr-8 mt-6 lg:mt-0">
-          <h2 class="text-2xl font-semibold text-gray-800">Réalisations de quelques lampadaires solaires à Bamako et environs</h2>
-          <p class="mt-4 text-gray-600">Étude préalable et diagnostic : Analyse des besoins d’éclairage dans les différentes zones. Évaluation du potentiel solaire et étude de faisabilité technique pour l’installation. Planification et conception : Identification des emplacements stratégiques pour l’installation des lampadaires. Conception d’un plan d’implantation en tenant compte des contraintes techniques et environnementales. Réalisation de l’installation : Montage et installation des lampadaires solaires, intégrant des systèmes de batteries et de gestion automatisée de l’éclairage. Intégration avec le réseau de gestion de l’éclairage public pour un suivi optimal du fonctionnement. Mise en service et tests : Réalisation de tests de performance et ajustements nécessaires pour assurer une luminosité homogène et efficace. Formation des équipes locales pour la maintenance et la gestion des installations. Résultats et retombées : Amélioration de la sécurité nocturne et de la qualité de vie dans les zones concernées. Réduction de la consommation énergétique et de l’empreinte carbone. Modernisation de l’infrastructure d’éclairage public grâce à l’utilisation de technologies solaires innovantes.</p>
-          <button class="mt-4 px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 modal-open" data-title="Réalisations de quelques lampadaires solaires à Bamako et environs" data-description="Pour plus d'informations,contactez-nous!">En savoir plus</button>
-        </div>
-      </div>
-      <!-- Project 5 -->
-      <div class="flex flex-col lg:flex-row items-center lg:items-start">
-        <img src="./I/a51.jpg" alt="Projet 5" class="w-full lg:w-1/2 rounded-lg shadow-md">
-        <div class="lg:pl-8 mt-6 lg:mt-0">
-          <h2 class="text-2xl font-semibold text-gray-800">Réalisations de quelques lampadaires solaires à Bamako et environs</h2>
-          <p class="mt-4 text-gray-600">Étude préalable et diagnostic :
-
-            Analyse des besoins d’éclairage dans les différentes zones.
-            Évaluation du potentiel solaire et étude de faisabilité technique pour l’installation.
-            Planification et conception :
-            
-            Identification des emplacements stratégiques pour l’installation des lampadaires.
-            Conception d’un plan d’implantation en tenant compte des contraintes techniques et environnementales.
-            Réalisation de l’installation :
-            
-            Montage et installation des lampadaires solaires, intégrant des systèmes de batteries et de gestion automatisée de l’éclairage.
-            Intégration avec le réseau de gestion de l’éclairage public pour un suivi optimal du fonctionnement.
-            Mise en service et tests :
-            
-            Réalisation de tests de performance et ajustements nécessaires pour assurer une luminosité homogène et efficace.
-            Formation des équipes locales pour la maintenance et la gestion des installations.
-            Résultats et retombées :
-            
-            Amélioration de la sécurité nocturne et de la qualité de vie dans les zones concernées.
-            Réduction de la consommation énergétique et de l’empreinte carbone.
-            Modernisation de l’infrastructure d’éclairage public grâce à l’utilisation de technologies solaires innovantes.
-            </p>
-           <!-- Galerie d'images -->
-           <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
-            <img src="./I/a12.jpg" alt="Image 1" class="w-full h-32 object-cover rounded-lg shadow-md">
-            <img src="./I/a13.jpg" alt="Image 2" class="w-full h-32 object-cover rounded-lg shadow-md">
-            <img src="./I/a14.jpg" alt="Image 3" class="w-full h-32 object-cover rounded-lg shadow-md">
-            <img src="./I/a34.jpg" alt="Image 4" class="w-full h-32 object-cover rounded-lg shadow-md">
-          </div>
-        </div>
-      </div>
-      <!-- Project 6 -->
-      <div class="flex flex-col lg:flex-row-reverse items-center lg:items-start">
-        <img src="./I/a61.jpg" alt="Projet 6" class="w-full lg:w-1/2 rounded-lg shadow-md">
-        <div class="lg:pr-8 mt-6 lg:mt-0">
-          <h2 class="text-2xl font-semibold text-gray-800">Reconfiguration d’un système de  28,75 KWc avec un stockage et 115,2 kWh Gel à Sanakoroba en Décembre 2022</h2>
-          <p class="mt-4 text-gray-600">Analyse et diagnostic initial :
-
-            Évaluation de l’état existant du système et identification des axes d’amélioration.
-            Diagnostic des performances du système et du potentiel d’optimisation du stockage.
-            Planification et conception de la reconfiguration :
-            
-            Élaboration d’un plan détaillé pour la reconfiguration du système en vue d’intégrer le stockage.
-            Dimensionnement précis du nouveau système pour répondre aux exigences techniques et énergétiques.
-            Réalisation des travaux :
-            
-            Modification et réorganisation des composants du système photovoltaïque.
-            Installation du système de stockage de 115,2 kWh Gel et intégration avec les équipements existants.
-            Réalisation des tests de performance pour garantir le bon fonctionnement de l’ensemble.
-            Mise en service et suivi :
-            
-            Lancement du système reconfiguré avec vérification des performances.
-            Formation des équipes de maintenance pour une gestion optimale et un suivi régulier.
-            Résultats et retombées :
-            
-            Amélioration de l’efficacité énergétique et de la stabilité du système.
-            Optimisation de la production d’énergie et meilleure gestion des pics de demande.
-            Renforcement de l’autonomie énergétique du site grâce à une intégration réussie du stockage.</p>
-          <!-- Galerie d'images -->
-          <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
-            <img src="./I/a12.jpg" alt="Image 1" class="w-full h-32 object-cover rounded-lg shadow-md">
-            <img src="./I/a13.jpg" alt="Image 2" class="w-full h-32 object-cover rounded-lg shadow-md">
-            <img src="./I/a14.jpg" alt="Image 3" class="w-full h-32 object-cover rounded-lg shadow-md">
-            <img src="./I/a34.jpg" alt="Image 4" class="w-full h-32 object-cover rounded-lg shadow-md">
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- Modal -->
-  <div id="modal" class="modal">
-    <div class="modal-content">
-      <h2 id="modal-title" class="text-2xl font-semibold"></h2>
-      <p id="modal-description" class="mt-4 text-gray-600"></p>
-      <button class="modal-close">Fermer</button>
-    </div>
-  </div>
-
-  <script>
-    // JavaScript pour gérer la modale
-    document.addEventListener('DOMContentLoaded', () => {
-      const modal = document.getElementById('modal');
-      const modalTitle = document.getElementById('modal-title');
-      const modalDescription = document.getElementById('modal-description');
-      const modalClose = modal.querySelector('.modal-close');
-
-      // Ouvrir la modale
-      document.querySelectorAll('.modal-open').forEach(button => {
-        button.addEventListener('click', () => {
-          const title = button.getAttribute('data-title');
-          const description = button.getAttribute('data-description');
-          modalTitle.textContent = title;
-          modalDescription.textContent = description;
-          modal.classList.add('active');
-        });
-      });
-
-      // Fermer la modale
-      modalClose.addEventListener('click', () => {
-        modal.classList.remove('active');
-      });
-
-      // Fermer la modale en cliquant à l'extérieur
-      modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-          modal.classList.remove('active');
-        }
-      });
-    });
-  </script>
-
-  <footer
-  class="text-center text-surface/75 text-white lg:text-left"
-  style="background-image: url(./sl.jpeg); background-repeat: no-repeat; background-size: cover;"
->
-  <!-- Social media section -->
-  <div
-    class="flex items-center justify-center border-b-2 border-neutral-200 p-6 dark:border-white/10 lg:justify-between"
-  >
-    <div class="me-12 hidden lg:block">
-      <span>Rejoignez-nous sur les réseaux sociaux :</span>
-  </div>
-  <div class="flex justify-center">
-    <a href="https://m.facebook.com/profile.php?id=100082876795747" class="me-6 [&>svg]:h-4 [&>svg]:w-4">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 320 512">
-        <path d="M80 299.3V512H196V299.3h86.5l18-97.8H196V166.9c0-51.7 20.3-71.5 72.7-71.5c16.3 0 29.4 .4 37 1.2V7.9C291.4 4 256.4 0 236.2 0C129.3 0 80 50.5 80 159.4v42.1H14v97.8H80z" />
-      </svg>
-    </a>
-    <a href="https://www.x.com/CamaraServices" class="me-6 [&>svg]:h-4 [&>svg]:w-4">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 512 512">
-        <path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z" />
-      </svg>
-    </a>
-    <a href="https://www.instagram.com/CamaraServices" class="me-6 [&>svg]:h-4 [&>svg]:w-4">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 448 512">
-        <path
-          d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"
-        />
-      </svg>
-    </a>
-    <a href="https://www.linkedin.com/company/camara-services-sarl" class="me-6 [&>svg]:h-4 [&>svg]:w-4">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 448 512">
-        <path d="M100.3 448H7.4V148.9h92.9zM53.8 108.1C24.1 108.1 0 83.5 0 53.8a53.8 53.8 0 0 1 107.6 0c0 29.7-24.1 54.3-53.8 54.3zM447.9 448h-92.7V302.4c0-34.7-.7-79.2-48.3-79.2-48.3 0-55.7 37.7-55.7 76.7V448h-92.8V148.9h89.1v40.8h1.3c12.4-23.5 42.7-48.3 87.9-48.3 94 0 111.3 61.9 111.3 142.3V448z" />
-      </svg>
-    </a>
-  </div>
+<body>
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" onclick="document.getElementById('mobileMenu').classList.remove('open')">✕</button>
+  <a href="./index.html">Accueil</a>
+  <a href="./about.html">À propos</a>
+  <a href="./projets.html" class="active">Projets</a>
+  <a href="./contact.html">Contact</a>
 </div>
-
-  <!-- Main container -->
-  <div class="mx-6 py-10 text-center md:text-left">
-    <div class="grid-1 grid gap-8 md:grid-cols-3 lg:grid-cols-3">
-      <!-- Left section -->
-      <div class="">
-        <h6 class="mb-4 flex items-center justify-center font-semibold uppercase md:justify-start">
-          <span class="me-3 [&>svg]:h-4 [&>svg]:w-4">
-            <img src="./logo2.png" class="w-16" alt="" />
-          </span>
-          CamaraServices
-        </h6>
-        <p>Une entreprise spécialisée dans l'offre des services énergétiques durables.</p>
-      </div>
-
-      <!-- Center section -->
-<div class="text-center">
-    <h6 class="mb-4 font-semibold uppercase">Services</h6>
-    <p class="mb-4">
-      <a href="./etude.html" class="hover:underline">Étude</a>
-    </p>
-    <p class="mb-4">
-      <a href="./installlation.html" class="hover:underline">Installation</a>
-    </p>
-    <p class="mb-4">
-      <a href="./vente.html" class="hover:underline">Vente</a>
-    </p>
-    <p>
-      <a href="./conseil.html" class="hover:underline">Conseil</a>
-    </p>
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightbox-img" src="" alt="">
+</div>
+<nav>
+  <div class="nav-inner">
+    <a href="./index.html" class="nav-logo">☀ Camara<span>Services</span></a>
+    <ul class="nav-links">
+      <li><a href="./index.html">Accueil</a></li>
+      <li><a href="./about.html">À propos</a></li>
+      <li><a href="./projets.html" class="active">Projets</a></li>
+      <li><a href="./contact.html">Contact</a></li>
+    </ul>
+    <div class="hamburger" onclick="document.getElementById('mobileMenu').classList.add('open')"><span></span><span></span><span></span></div>
   </div>
-  
-      <!-- Right section (Contact) -->
+</nav>
+
+<!-- HERO -->
+<section style="padding:10rem 2rem 4rem;background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(255,107,43,0.1),transparent 60%),var(--bg);position:relative;overflow:hidden;">
+  <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse at center,black 30%,transparent 70%);pointer-events:none;"></div>
+  <div style="max-width:1280px;margin:0 auto;position:relative;z-index:1;">
+    <div style="display:inline-flex;align-items:center;gap:0.5rem;background:rgba(255,107,43,0.12);border:1px solid rgba(255,107,43,0.25);color:var(--orange2);padding:0.4rem 1rem;border-radius:100px;font-size:0.8rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:1.5rem;" class="fade-up">✦ Nos réalisations</div>
+    <h1 style="font-size:clamp(2.5rem,6vw,4.5rem);font-weight:900;letter-spacing:-0.02em;line-height:1.1;margin-bottom:1.2rem;" class="fade-up">Nos projets <span style="color:var(--orange);">en détail</span></h1>
+    <p style="color:var(--muted);font-size:1.1rem;line-height:1.7;max-width:600px;" class="fade-up">Découvrez l'ensemble de nos réalisations dans le domaine de l'énergie solaire, du forage et de l'éclairage photovoltaïque.</p>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section style="padding:4rem 2rem 6rem;">
+  <div style="max-width:1280px;margin:0 auto;">
+
+    <!-- P1 -->
+    <div class="project-block fade-up">
+      <div class="project-img-main">
+        <img src="./I/a11.jpg" alt="Forage Sirakoro" onclick="openLightbox(this.src)">
+      </div>
       <div>
-        <p class="mb-4 flex items-center justify-center md:justify-start">
-          <span class="me-3 [&>svg]:h-5 [&>svg]:w-5">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-              <path
-                d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z"
-              />
-              <path
-                d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00.091-.086L12 5.43z"
-              />
-            </svg>
-          </span>
-          Baco-Djicoroni ACI -  vers la Banque " Bank Of Africa (BOA)"
-        </p>
-        <p class="mb-4 flex items-center justify-center md:justify-start">
-          <span class="me-3 [&>svg]:h-5 [&>svg]:w-5">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-              <path
-                d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z"
-              />
-              <path
-                d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z"
-              />
-            </svg>
-          </span>
-          <a href="mailto:contact@camara-services.com">contact@camara-services.com</a>
-        </p>
-        <p class="mb-4 flex items-center justify-center md:justify-start">
-          <span class="me-3 [&>svg]:h-5 [&>svg]:w-5">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-              <path
-                fill-rule="evenodd"
-                d="M1.5 4.5a3 3 0 013-3h1.372c.86 0 1.61.586 1.819 1.42l1.105 4.423a1.875 1.875 0 01-.694 1.955l-1.293.97c-.135.101-.164.249-.126.352a11.285 11.285 0 006.697 6.697c.103.038.25.009.352-.126l.97-1.293a1.875 1.875 0 011.955-.694l4.423 1.105c.834.209 1.42.959 1.42 1.82V19.5a3 3 0 01-3 3h-2.25C8.552 22.5 1.5 15.448 1.5 6.75V4.5z"
-                clip-rule="evenodd"
-              />
-            </svg>
-          </span>
-          +223 92 82 89 79 / 78 14 61 71
-        </p>
+        <span class="tag">🔩 Forage</span>
+        <div style="font-size:0.82rem;color:var(--muted);margin-bottom:0.8rem;">Mars 2023</div>
+        <h2 style="font-size:1.8rem;font-weight:800;letter-spacing:-0.01em;margin-bottom:1.2rem;line-height:1.2;">Forage solaire à Sirakoro pour un particulier</h2>
+        <p style="color:var(--muted);font-size:0.95rem;line-height:1.8;margin-bottom:1.5rem;">Étude géologique préalable pour déterminer l'emplacement optimal. Réalisation du forage selon les techniques adaptées aux conditions locales, avec installation du système de pompage solaire et dispositifs de sécurité. Tests de fonctionnement pour garantir une performance optimale.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:1.5rem;">
+          <span style="background:rgba(255,255,255,0.06);border:1px solid var(--border);padding:0.3rem 0.8rem;border-radius:100px;font-size:0.78rem;color:var(--muted);">Étude de faisabilité</span>
+          <span style="background:rgba(255,255,255,0.06);border:1px solid var(--border);padding:0.3rem 0.8rem;border-radius:100px;font-size:0.78rem;color:var(--muted);">Pompage solaire</span>
+          <span style="background:rgba(255,255,255,0.06);border:1px solid var(--border);padding:0.3rem 0.8rem;border-radius:100px;font-size:0.78rem;color:var(--muted);">Mise en service</span>
+        </div>
+        <div class="project-gallery">
+          <img src="./I/a12.jpg" alt="" onclick="openLightbox(this.src)">
+          <img src="./I/a13.jpg" alt="" onclick="openLightbox(this.src)">
+          <img src="./I/a14.jpg" alt="" onclick="openLightbox(this.src)">
+          <img src="./I/a34.jpg" alt="" onclick="openLightbox(this.src)">
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Copyright -->
-  <div class="bg-black/5 p-6 text-center">
-    <span>© <script>document.write(new Date().getFullYear())</script> Copyright:</span>
-    <a class="font-semibold" href="https://camara-services.com/">CamaraServices</a>
+    <!-- P2 -->
+    <div class="project-block reverse fade-up">
+      <div class="project-img-main">
+        <img src="./I/a20.jpeg" alt="15kWc lithium" onclick="openLightbox(this.src)">
+      </div>
+      <div>
+        <span class="tag">☀ Solaire</span>
+        <div style="font-size:0.82rem;color:var(--muted);margin-bottom:0.8rem;">Avril 2023</div>
+        <h2 style="font-size:1.8rem;font-weight:800;letter-spacing:-0.01em;margin-bottom:1.2rem;line-height:1.2;">Système 15 kWc + stockage lithium 45 kWh</h2>
+        <p style="color:var(--muted);font-size:0.95rem;line-height:1.8;margin-bottom:1.5rem;">Évaluation des besoins énergétiques, dimensionnement du système solaire, élaboration du schéma électrique. Mise en place des panneaux photovoltaïques avec onduleur et batterie lithium haute capacité pour une installation entièrement autonome.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:1.5rem;">
+          <span style="background:rgba(255,255,255,0.06);border:1px solid var(--border);padding:0.3rem 0.8rem;border-radius:100px;font-size:0.78rem;color:var(--muted);">15 kWc</span>
+          <span style="background:rgba(255,255,255,0.06);border:1px solid var(--border);padding:0.3rem 0.8rem;border-radius:100px;font-size:0.78rem;color:var(--muted);">Batterie lithium 45 kWh</span>
+          <span style="background:rgba(255,255,255,0.06);border:1px solid var(--border);padding:0.3rem 0.8rem;border-radius:100px;font-size:0.78rem;color:var(--muted);">Autonomie totale</span>
+        </div>
+        <div class="project-gallery">
+          <img src="./I/a21.jpeg" alt="" onclick="openLightbox(this.src)">
+          <img src="./I/a22.jpeg" alt="" onclick="openLightbox(this.src)">
+          <img src="./I/a23.jpeg" alt="" onclick="openLightbox(this.src)">
+          <img src="./I/a24.jpeg" alt="" onclick="openLightbox(this.src)">
+        </div>
+      </div>
+    </div>
+
+    <!-- P3 -->
+    <div class="project-block fade-up">
+      <div class="project-img-main">
+        <img src="./I/a31.jpg" alt="Missabougou 3.9kWc" onclick="openLightbox(this.src)">
+      </div>
+      <div>
+        <span class="tag">☀ Solaire</span>
+        <div style="font-size:0.82rem;color:var(--muted);margin-bottom:0.8rem;">Mai 2023</div>
+        <h2 style="font-size:1.8rem;font-weight:800;letter-spacing:-0.01em;margin-bottom:1.2rem;line-height:1.2;">Système 3,9 kWc à Missabougou</h2>
+        <p style="color:var(--muted);font-size:0.95rem;line-height:1.8;margin-bottom:1.5rem;">Analyse des besoins énergétiques du client et évaluation du potentiel solaire du site. Dimensionnement précis du système, montage et installation des panneaux PV avec raccordement sécurisé. Formation du client à l'utilisation et à la maintenance.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:1.5rem;">
+          <span style="background:rgba(255,255,255,0.06);border:1px solid var(--border);padding:0.3rem 0.8rem;border-radius:100px;font-size:0.78rem;color:var(--muted);">3,9 kWc</span>
+          <span style="background:rgba(255,255,255,0.06);border:1px solid var(--border);padding:0.3rem 0.8rem;border-radius:100px;font-size:0.78rem;color:var(--muted);">Résidentiel</span>
+          <span style="background:rgba(255,255,255,0.06);border:1px solid var(--border);padding:0.3rem 0.8rem;border-radius:100px;font-size:0.78rem;color:var(--muted);">Missabougou</span>
+        </div>
+        <div class="project-gallery">
+          <img src="./I/a12.jpg" alt="" onclick="openLightbox(this.src)">
+          <img src="./I/a13.jpg" alt="" onclick="openLightbox(this.src)">
+          <img src="./I/a14.jpg" alt="" onclick="openLightbox(this.src)">
+          <img src="./I/a34.jpg" alt="" onclick="openLightbox(this.src)">
+        </div>
+      </div>
+    </div>
+
+    <!-- P4 -->
+    <div class="project-block reverse fade-up">
+      <div class="project-img-main">
+        <img src="./I/a41.jpg" alt="Lampadaires solaires" onclick="openLightbox(this.src)">
+      </div>
+      <div>
+        <span class="tag">💡 Éclairage PV</span>
+        <div style="font-size:0.82rem;color:var(--muted);margin-bottom:0.8rem;">Mai 2023</div>
+        <h2 style="font-size:1.8rem;font-weight:800;letter-spacing:-0.01em;margin-bottom:1.2rem;line-height:1.2;">Lampadaires solaires à Bamako et environs</h2>
+        <p style="color:var(--muted);font-size:0.95rem;line-height:1.8;margin-bottom:1.5rem;">Analyse des besoins d'éclairage dans différentes zones, identification des emplacements stratégiques. Installation de lampadaires solaires avec batteries intégrées et gestion automatisée. Formation des équipes locales pour la maintenance.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:1.5rem;">
+          <span style="background:rgba(255,255,255,0.06);border:1px solid var(--border);padding:0.3rem 0.8rem;border-radius:100px;font-size:0.78rem;color:var(--muted);">Éclairage public</span>
+          <span style="background:rgba(255,255,255,0.06);border:1px solid var(--border);padding:0.3rem 0.8rem;border-radius:100px;font-size:0.78rem;color:var(--muted);">Bamako</span>
+          <span style="background:rgba(255,255,255,0.06);border:1px solid var(--border);padding:0.3rem 0.8rem;border-radius:100px;font-size:0.78rem;color:var(--muted);">Autonome</span>
+        </div>
+        <a href="./contact.html" class="btn-primary">Demander un devis →</a>
+      </div>
+    </div>
+
+    <!-- P5 -->
+    <div class="project-block fade-up">
+      <div class="project-img-main">
+        <img src="./I/a51.jpg" alt="Lampadaires solaires 2" onclick="openLightbox(this.src)">
+      </div>
+      <div>
+        <span class="tag">💡 Éclairage PV</span>
+        <div style="font-size:0.82rem;color:var(--muted);margin-bottom:0.8rem;">Mai 2023</div>
+        <h2 style="font-size:1.8rem;font-weight:800;letter-spacing:-0.01em;margin-bottom:1.2rem;line-height:1.2;">Extension réseau lampadaires solaires</h2>
+        <p style="color:var(--muted);font-size:0.95rem;line-height:1.8;margin-bottom:1.5rem;">Extension du programme d'éclairage solaire avec tests de performance et ajustements pour une luminosité homogène. Amélioration de la sécurité nocturne et de la qualité de vie dans les zones concernées, avec réduction significative de l'empreinte carbone.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:1.5rem;">
+          <span style="background:rgba(255,255,255,0.06);border:1px solid var(--border);padding:0.3rem 0.8rem;border-radius:100px;font-size:0.78rem;color:var(--muted);">LED solaire</span>
+          <span style="background:rgba(255,255,255,0.06);border:1px solid var(--border);padding:0.3rem 0.8rem;border-radius:100px;font-size:0.78rem;color:var(--muted);">Gestion automatique</span>
+        </div>
+        <div class="project-gallery">
+          <img src="./I/a12.jpg" alt="" onclick="openLightbox(this.src)">
+          <img src="./I/a13.jpg" alt="" onclick="openLightbox(this.src)">
+          <img src="./I/a14.jpg" alt="" onclick="openLightbox(this.src)">
+          <img src="./I/a34.jpg" alt="" onclick="openLightbox(this.src)">
+        </div>
+      </div>
+    </div>
+
+    <!-- P6 -->
+    <div class="project-block reverse fade-up">
+      <div class="project-img-main">
+        <img src="./I/a61.jpg" alt="Sanakoroba 28kWc" onclick="openLightbox(this.src)">
+      </div>
+      <div>
+        <span class="tag">☀ Solaire</span>
+        <div style="font-size:0.82rem;color:var(--muted);margin-bottom:0.8rem;">Décembre 2022</div>
+        <h2 style="font-size:1.8rem;font-weight:800;letter-spacing:-0.01em;margin-bottom:1.2rem;line-height:1.2;">Reconfiguration 28,75 kWc + stockage gel 115,2 kWh à Sanakoroba</h2>
+        <p style="color:var(--muted);font-size:0.95rem;line-height:1.8;margin-bottom:1.5rem;">Évaluation de l'état existant du système, diagnostic des performances et identification des axes d'amélioration. Reconfiguration complète avec intégration d'un stockage gel de 115,2 kWh pour une autonomie optimale et une gestion efficace des pics de demande.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:1.5rem;">
+          <span style="background:rgba(255,255,255,0.06);border:1px solid var(--border);padding:0.3rem 0.8rem;border-radius:100px;font-size:0.78rem;color:var(--muted);">28,75 kWc</span>
+          <span style="background:rgba(255,255,255,0.06);border:1px solid var(--border);padding:0.3rem 0.8rem;border-radius:100px;font-size:0.78rem;color:var(--muted);">Stockage gel 115,2 kWh</span>
+          <span style="background:rgba(255,255,255,0.06);border:1px solid var(--border);padding:0.3rem 0.8rem;border-radius:100px;font-size:0.78rem;color:var(--muted);">Sanakoroba</span>
+        </div>
+        <div class="project-gallery">
+          <img src="./I/a12.jpg" alt="" onclick="openLightbox(this.src)">
+          <img src="./I/a13.jpg" alt="" onclick="openLightbox(this.src)">
+          <img src="./I/a14.jpg" alt="" onclick="openLightbox(this.src)">
+          <img src="./I/a34.jpg" alt="" onclick="openLightbox(this.src)">
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="padding:5rem 2rem;background:var(--bg2);">
+  <div style="max-width:700px;margin:0 auto;text-align:center;" class="fade-up">
+    <div style="font-size:3rem;margin-bottom:1rem;">☀</div>
+    <h2 style="font-size:clamp(1.8rem,3vw,2.5rem);font-weight:800;letter-spacing:-0.02em;margin-bottom:1rem;">Vous avez un projet ?</h2>
+    <p style="color:var(--muted);font-size:1rem;line-height:1.7;margin-bottom:2rem;">Contactez-nous pour discuter de votre projet d'installation solaire, de forage ou d'éclairage photovoltaïque.</p>
+    <a href="./contact.html" class="btn-primary" style="font-size:1.05rem;padding:1rem 2.5rem;">Nous contacter →</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="background:#030508;border-top:1px solid var(--border);padding:4rem 2rem 2rem;">
+  <div style="max-width:1280px;margin:0 auto;">
+    <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1.5fr;gap:3rem;margin-bottom:3rem;" class="footer-grid-resp">
+      <div>
+        <div style="font-family:'Outfit',sans-serif;font-size:1.3rem;font-weight:800;margin-bottom:1rem;">☀ Camara<span style="color:var(--orange);">Services</span></div>
+        <p style="color:var(--muted);font-size:0.9rem;line-height:1.7;margin-bottom:1.5rem;">Services énergétiques durables depuis 2023.</p>
+      </div>
+      <div>
+        <div style="font-family:'Outfit',sans-serif;font-weight:700;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:1.2rem;">Navigation</div>
+        <div style="display:flex;flex-direction:column;gap:0.7rem;">
+          <a href="./index.html" style="color:var(--muted);text-decoration:none;font-size:0.9rem;">Accueil</a>
+          <a href="./about.html" style="color:var(--muted);text-decoration:none;font-size:0.9rem;">À propos</a>
+          <a href="./projets.html" style="color:var(--orange);text-decoration:none;font-size:0.9rem;">Projets</a>
+          <a href="./contact.html" style="color:var(--muted);text-decoration:none;font-size:0.9rem;">Contact</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'Outfit',sans-serif;font-weight:700;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:1.2rem;">Services</div>
+        <div style="display:flex;flex-direction:column;gap:0.7rem;">
+          <a href="./etude.html" style="color:var(--muted);text-decoration:none;font-size:0.9rem;">Étude</a>
+          <a href="./installlation.html" style="color:var(--muted);text-decoration:none;font-size:0.9rem;">Installation</a>
+          <a href="./vente.html" style="color:var(--muted);text-decoration:none;font-size:0.9rem;">Vente</a>
+          <a href="./conseil.html" style="color:var(--muted);text-decoration:none;font-size:0.9rem;">Conseil</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'Outfit',sans-serif;font-weight:700;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:1.2rem;">Contact</div>
+        <div style="color:var(--muted);font-size:0.88rem;line-height:1.7;">
+          <p style="margin-bottom:0.6rem;">📍 Baco-Djicoroni ACI, Bamako</p>
+          <p style="margin-bottom:0.6rem;">✉ <a href="mailto:contact@camara-services.com" style="color:var(--muted);text-decoration:none;">contact@camara-services.com</a></p>
+          <p>📞 +223 92 82 89 79</p>
+        </div>
+      </div>
+    </div>
+    <div style="border-top:1px solid var(--border);padding-top:1.5rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+      <span style="color:var(--muted);font-size:0.85rem;">© <span id="year"></span> <a href="#" style="color:var(--orange);text-decoration:none;">CamaraServices SARL</a></span>
+    </div>
   </div>
 </footer>
-
-
-
- <script text="javascript">
-   const navbar = document.getElementById('navFixed');
-   const navlogo = document.getElementById('navlogo');
-window.onscroll = () => {
-   if (window.scrollY > 80) {
-       navbar.classList.add('bg-white');
-        navbar.classList.add('text-whit');
-       navlogo.setAttribute('src', '/logo1.png');
-   } else {
-       navbar.classList.remove('bg-white');
-       navbar.classList.remove('text-blue-900');
-       navbar.classList.add('text-white');
-       navlogo.setAttribute('src', '/logo2.png');
-
-   }
-};
- </script>
+<style>@media(max-width:768px){.footer-grid-resp{grid-template-columns:1fr!important;}}</style>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+  const observer = new IntersectionObserver((entries)=>{ entries.forEach((e,i)=>{ if(e.isIntersecting){ setTimeout(()=>e.target.classList.add('visible'),i*100); observer.unobserve(e.target); } }); },{threshold:0.05});
+  document.querySelectorAll('.fade-up').forEach(el=>observer.observe(el));
+  function openLightbox(src){document.getElementById('lightbox-img').src=src;document.getElementById('lightbox').classList.add('open');}
+  function closeLightbox(){document.getElementById('lightbox').classList.remove('open');}
+</script>
 </body>
 </html>
-  
