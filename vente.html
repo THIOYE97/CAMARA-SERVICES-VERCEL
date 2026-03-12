@@ -1,14 +1,136 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+<script>
+  (function() {
+    var KEY = 'cs-theme';
+    var root = document.documentElement;
+
+    function setKnob(theme) {
+      document.querySelectorAll('.theme-toggle-knob').forEach(function(k) {
+        k.textContent = theme === 'dark' ? '\u{1F319}' : '\u2600\uFE0F';
+      });
+    }
+
+    window.applyTheme = function(theme) {
+      root.setAttribute('data-theme', theme);
+      localStorage.setItem(KEY, theme);
+      setKnob(theme);
+    };
+
+    window.toggleTheme = function() {
+      var cur = root.getAttribute('data-theme') || 'dark';
+      applyTheme(cur === 'dark' ? 'light' : 'dark');
+    };
+
+    function autoTheme() {
+      var h = new Date().getHours();
+      return (h >= 6 && h < 20) ? 'light' : 'dark';
+    }
+
+    var saved = localStorage.getItem(KEY);
+    if (saved) {
+      applyTheme(saved);
+    } else {
+      var sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      applyTheme(sysDark ? 'dark' : autoTheme());
+    }
+
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+      if (!localStorage.getItem(KEY)) applyTheme(e.matches ? 'dark' : 'light');
+    });
+
+    setInterval(function() {
+      if (!localStorage.getItem(KEY)) applyTheme(autoTheme());
+    }, 60000);
+  })();
+</script>
   <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="./assets/favicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Vente — CamaraServices</title>
-  <link rel="icon" type="image/png" href="./assets/favicon.png">
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
+    .mobile-menu { display: none; }
+    .mobile-menu.open { display: flex !important; }
+
     :root{--bg:#06090F;--card:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.08);--orange:#FF6B2B;--orange2:#FF8C55;--text:#F0F4FF;--muted:#8892A4;}
+
+    /* ── LIGHT MODE ── */
+    html[data-theme="light"] {
+      --bg: #F4F1EB;
+      --bg2: #EAE6DC;
+      --card: rgba(0,0,0,0.04);
+      --border: rgba(0,0,0,0.09);
+      --text: #1A1F2E;
+      --muted: #5A6478;
+    }
+    html[data-theme="light"] body,
+    html[data-theme="light"] { background-color: var(--bg) !important; color: var(--text) !important; }
+    html[data-theme="light"] nav { background: rgba(244,241,235,0.88) !important; border-bottom-color: rgba(0,0,0,0.08) !important; }
+    html[data-theme="light"] nav.scrolled { background: rgba(244,241,235,0.96) !important; }
+    html[data-theme="light"] footer { background: #D6D0C4 !important; border-top-color: rgba(0,0,0,0.1) !important; }
+    html[data-theme="light"] section { background-color: var(--bg) !important; }
+    html[data-theme="light"] .hero-bg { background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(255,107,43,0.10) 0%, transparent 60%), var(--bg) !important; }
+    html[data-theme="light"] .grid-pattern { background-image: linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px) !important; }
+    html[data-theme="light"] .orb-1 { background: rgba(255,107,43,0.06) !important; }
+    html[data-theme="light"] .orb-2 { background: rgba(255,140,85,0.04) !important; }
+    html[data-theme="light"] .nav-logo,
+    html[data-theme="light"] .nav-links a { color: #3A4255 !important; }
+    html[data-theme="light"] .nav-links a:hover,
+    html[data-theme="light"] .nav-links a.active { color: var(--orange) !important; }
+    html[data-theme="light"] .hamburger span { background: #1A1F2E !important; }
+    html[data-theme="light"] .mobile-menu { background: var(--bg) !important; }
+    html[data-theme="light"] .mobile-menu a { color: #1A1F2E !important; }
+    html[data-theme="light"] .hero-title .line-dim { color: var(--muted) !important; }
+    html[data-theme="light"] .stat-num { color: #1A1F2E !important; }
+    html[data-theme="light"] .service-card,
+    html[data-theme="light"] .activity-card,
+    html[data-theme="light"] .team-card,
+    html[data-theme="light"] .team-section,
+    html[data-theme="light"] .contact-card,
+    html[data-theme="light"] .project-block,
+    html[data-theme="light"] .feature-item,
+    html[data-theme="light"] .product-card { background: rgba(0,0,0,0.04) !important; border-color: rgba(0,0,0,0.1) !important; }
+    html[data-theme="light"] .hero-desc,
+    html[data-theme="light"] .activity-desc,
+    html[data-theme="light"] .team-bio,
+    html[data-theme="light"] .service-desc,
+    html[data-theme="light"] p { color: var(--muted); }
+    html[data-theme="light"] .hero-badge { background: rgba(255,107,43,0.1) !important; border-color: rgba(255,107,43,0.25) !important; }
+    html[data-theme="light"] .partners-section { border-top-color: rgba(0,0,0,0.08) !important; }
+    html[data-theme="light"] .partner-logo { filter: none !important; opacity: 0.7 !important; }
+    html[data-theme="light"] .footer-copy,
+    html[data-theme="light"] .footer-tagline,
+    html[data-theme="light"] .footer-links a,
+    html[data-theme="light"] .footer-contact-text { color: #4A5568 !important; }
+    html[data-theme="light"] .footer-heading { color: #1A1F2E !important; }
+    html[data-theme="light"] .footer-logo { color: #1A1F2E !important; }
+    html[data-theme="light"] .social-link { background: rgba(0,0,0,0.06) !important; border-color: rgba(0,0,0,0.12) !important; color: #4A5568 !important; }
+    html[data-theme="light"] ::-webkit-scrollbar-track { background: var(--bg) !important; }
+    html[data-theme="light"] table tbody tr { background: transparent !important; }
+    html[data-theme="light"] .tag { background: rgba(255,107,43,0.12) !important; }
+    html[data-theme="light"] .project-img-main,
+    html[data-theme="light"] .activity-img { border-color: rgba(0,0,0,0.1) !important; }
+    html[data-theme="light"] .map-wrap { border-color: rgba(0,0,0,0.1) !important; }
+    html[data-theme="light"] .map-wrap iframe { filter: none !important; }
+    /* toggle btn */
+    .theme-toggle {
+      width: 44px; height: 24px; border-radius: 100px;
+      background: rgba(255,107,43,0.15); border: 1.5px solid rgba(255,107,43,0.4);
+      cursor: pointer; transition: background 0.3s;
+      display: flex; align-items: center; padding: 3px; flex-shrink: 0; outline: none;
+    }
+    .theme-toggle:hover { background: rgba(255,107,43,0.28); }
+    .theme-toggle-knob {
+      width: 18px; height: 18px; border-radius: 50%; background: var(--orange);
+      transition: transform 0.35s cubic-bezier(.4,0,.2,1);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; line-height: 1; pointer-events: none; flex-shrink: 0;
+    }
+    html[data-theme="light"] .theme-toggle-knob { transform: translateX(20px); }
+
     *{margin:0;padding:0;box-sizing:border-box;} body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;min-height:100vh;display:flex;flex-direction:column;}
     h1,h2,h3{font-family:'Outfit',sans-serif;}
     ::-webkit-scrollbar{width:6px;} ::-webkit-scrollbar-track{background:var(--bg);} ::-webkit-scrollbar-thumb{background:rgba(255,107,43,0.4);border-radius:3px;}
@@ -28,8 +150,9 @@
 <div style="position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.015) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;mask-image:radial-gradient(ellipse at center,black 30%,transparent 80%);"></div>
 <nav style="position:fixed;top:0;left:0;right:0;z-index:100;padding:1.2rem 2rem;background:rgba(6,9,15,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);">
   <div style="max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;">
-    <a href="./index.html" style="font-family:'Outfit',sans-serif;font-weight:800;font-size:1.3rem;color:var(--text);text-decoration:none;">☀ Camara<span style="color:var(--orange);">Services</span></a>
-    <a href="javascript:history.back()" class="back-btn">← Retour</a>
+    <a href="./index.html" style="font-family:'Outfit',sans-serif;font-weight:800;font-size:1.3rem;color:var(--text);text-decoration:none;"><img src="./assets/favicon.png" alt="Logo" style="height:30px;width:auto;object-fit:contain;margin-right:6px;"> Camara<span style="color:var(--orange);">Services</span></a>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Thème"><span class="theme-toggle-knob">🌙</span></button>
+  <a href="javascript:history.back()" class="back-btn">← Retour</a>
   </div>
 </nav>
 <main class="main-content" style="position:relative;z-index:1;">
